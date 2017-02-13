@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/sdmcrmws.data" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/sdmcrmws.data" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ArrayOfwsCliente">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="wsCliente" nillable="true" type="tns:wsCliente" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfwsCliente" nillable="true" type="tns:ArrayOfwsCliente" />
+  <xs:complexType name="wsCliente">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Campo_1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_10" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_11" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_12" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_13" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_14" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_15" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_16" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_17" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_18" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_19" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_20" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_21" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_22" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_23" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_24" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_25" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_26" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_27" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_28" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_29" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_3" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_30" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_31" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_32" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_33" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_34" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_35" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_36" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_37" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_38" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_39" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_4" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_40" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_41" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_42" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_43" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_44" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_45" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_46" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_47" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_48" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_49" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_5" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_50" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_51" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_52" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_53" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_54" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_55" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_56" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_57" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_58" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_59" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_6" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_60" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_7" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_8" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Campo_9" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="wsCliente" nillable="true" type="tns:wsCliente" />
+  <xs:complexType name="wsControl">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Estado" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FechaHora" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Origen" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="wsControl" nillable="true" type="tns:wsControl" />
+</xs:schema>
