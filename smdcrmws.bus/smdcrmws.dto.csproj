@@ -7,8 +7,8 @@
     <ProjectGuid>{54DFE720-0C9D-4A25-A5E2-58C16AF6985C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>smdcrmws.bus</RootNamespace>
-    <AssemblyName>smdcrmws.bus</AssemblyName>
+    <RootNamespace>smdcrmws.dto</RootNamespace>
+    <AssemblyName>smdcrmws.dto</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,6 +44,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="wsCliente.cs" />
     <Compile Include="wsControl.cs" />
+    <Compile Include="wsItem.cs" />
+    <Compile Include="wsMaestro.cs" />
+    <Compile Include="wsOperario.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "smdcrmws", "smdcrmws\smdcrm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sdmcrmws.data", "sdmcrmws.data\sdmcrmws.data.csproj", "{D15FA37B-0C70-44A1-85D5-B909B0BBFE57}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "smdcrmws.bus", "smdcrmws.bus\smdcrmws.bus.csproj", "{54DFE720-0C9D-4A25-A5E2-58C16AF6985C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "smdcrmws.dto", "smdcrmws.bus\smdcrmws.dto.csproj", "{54DFE720-0C9D-4A25-A5E2-58C16AF6985C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "smdcrmClient", "smdcrmClient\smdcrmClient.csproj", "{4E6EAFC3-675E-42C8-80BF-BB1428857AA8}"
 	ProjectSection(ProjectDependencies) = postProject

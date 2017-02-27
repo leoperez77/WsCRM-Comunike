@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data;
 using System.Data.Common;
-using System.Data.SqlClient;
 using System.IO;
 using System.Web.Script.Serialization;
+using smdcrmws.dto;
 namespace sdmcrmws.data
 {
     public class DBcliente
@@ -42,8 +39,7 @@ namespace sdmcrmws.data
         }
 
         public static wsControl PutClienteSincronizar(Stream JSONdataStream)
-        {
-            
+        {            
             wsControl obj = new wsControl();
             obj.FechaHora = DateTime.Now.ToString();
             obj.Origen = System.Reflection.MethodBase.GetCurrentMethod().Name;
@@ -53,20 +49,17 @@ namespace sdmcrmws.data
                 // Read in our Stream into a string...
                 StreamReader reader = new StreamReader(JSONdataStream);
                 string JSONdata = reader.ReadToEnd();
-
-                // ..then convert the string into a single "wsOrder" record.
+                              
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 wsCliente cliente = jss.Deserialize<wsCliente>(JSONdata);
                 if (cliente == null)
-                {
-                    // Error: Couldn't deserialize our JSON string into a "wsOrder" object.
+                {                  
                     throw new System.InvalidOperationException("Objeto JSON no pudo convertirse en objeto wsCliente");                   
                 }
 
-                DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMPutcot_cliente");
-                DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, int.Parse(cliente.Campo_2));
-                //DBCommon.dbConn.AddInParameter(cmd, "@razon_social", DbType.String, cliente.Campo_4);
-
+                DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMSynccot_clientes");
+                DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, int.Parse(cliente.Campo_1));
+               
                 try
                 {
                     DBCommon.dbConn.ExecuteNonQuery(cmd);
@@ -165,13 +158,10 @@ namespace sdmcrmws.data
                 // Read in our Stream into a string...
                 StreamReader reader = new StreamReader(JSONdataStream);
                 string JSONdata = reader.ReadToEnd();
-
-                // ..then convert the string into a single "wsOrder" record.
+                               
                 JavaScriptSerializer jss = new JavaScriptSerializer();
                 var clientes = jss.Deserialize<List<wsCliente>>(JSONdata);
-
-                //var records = new ser.Deserialize<List<Record>>(jsonData);
-
+                
                 if (clientes == null)
                 {
                     // Error: Couldn't deserialize our JSON string into a "wsOrder" object.
@@ -182,8 +172,8 @@ namespace sdmcrmws.data
                 {
                     wsCliente cliente = clientes[i];
 
-                    DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMPutcot_cliente");
-                    DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, int.Parse(cliente.Campo_2));
+                    DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMSynccot_clientes");
+                    DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, int.Parse(cliente.Campo_1));
                     
                     try
                     {

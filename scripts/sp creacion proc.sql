@@ -231,6 +231,8 @@ SET		@sProcText = @sProcText + 'GO' + @sCRLF
 
 
 PRINT @sProcText
+go
+
 
 
 

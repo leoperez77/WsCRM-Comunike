@@ -6,8 +6,8 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
 using System.IO;
+using smdcrmws.dto;
 using sdmcrmws.data;
-
 namespace smdcrmws
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "Service1" in code, svc and config file together.
@@ -62,6 +62,50 @@ namespace smdcrmws
         public wsControl PutClientesSync(Stream JSONdataStream)
         {
             return DBcliente.PutClientesSincronizar(JSONdataStream);
+        }
+
+        public List<wsOperario> GetOperariosSync(string IdEmpresa)
+        {
+            try
+            {
+                return DBUsuario.GetOperarios(IdEmpresa);
+
+            }
+            catch (Exception ex)
+            {
+                //  Return any exception messages back to the Response header
+                OutgoingWebResponseContext response = WebOperationContext.Current.OutgoingResponse;
+                response.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                response.StatusDescription = ex.Message.Replace("\r\n", "");
+                return null;
+            }
+        }
+
+        public List<wsItem> GetItemsSync(string IdEmpresa)
+        {
+            try
+            {
+                return DBItem.GetItemsSincronizar(IdEmpresa);
+
+            }
+            catch (Exception ex)
+            {
+                //  Return any exception messages back to the Response header
+                OutgoingWebResponseContext response = WebOperationContext.Current.OutgoingResponse;
+                response.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                response.StatusDescription = ex.Message.Replace("\r\n", "");
+                return null;
+            }
+        }
+
+        public wsControl PutItemsSync(Stream JSONdataStream)
+        {
+            return DBItem.PutItemsSincronizar(JSONdataStream);
+        }
+
+        public List<wsMaestro> GetTiposTributariosSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGettipo_tributarios");
         }
     }
 }

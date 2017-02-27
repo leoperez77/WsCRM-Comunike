@@ -54,12 +54,15 @@
     <Compile Include="DBcliente.cs" />
     <Compile Include="DBCommon.cs" />
     <Compile Include="DBHelper.cs" />
+    <Compile Include="DBItem.cs" />
+    <Compile Include="DBMaestro.cs" />
+    <Compile Include="DBUsuario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\smdcrmws.bus\smdcrmws.bus.csproj">
+    <ProjectReference Include="..\smdcrmws.bus\smdcrmws.dto.csproj">
       <Project>{54dfe720-0c9d-4a25-a5e2-58c16af6985c}</Project>
-      <Name>smdcrmws.bus</Name>
+      <Name>smdcrmws.dto</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

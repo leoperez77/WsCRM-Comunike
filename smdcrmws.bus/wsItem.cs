@@ -9,7 +9,7 @@ namespace smdcrmws.dto
 {
     [DataContract]
     [Serializable]
-    public class wsCliente
+    public class wsItem
     {
         [DataMember]
         public String Campo_1 { get; set; }
@@ -205,6 +205,4 @@ namespace smdcrmws.dto
             }
         }
     }
-
-   
 }
