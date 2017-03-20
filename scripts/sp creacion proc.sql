@@ -1,3 +1,7 @@
+
+
+
+
 CREATE FUNCTION [dbo].[fnTableHasPrimaryKey](@sTableName varchar(128))
 RETURNS bit
 AS
@@ -142,7 +146,7 @@ SET	@sWhereClause = ''
 
 SET 	@sProcText = @sProcText + 'IF EXISTS(SELECT * FROM sysobjects WHERE name = ''CMGet' + @sTableName + 's)' + @sCRLF
 SET 	@sProcText = @sProcText + @sTAB + 'DROP PROC CMGet' + @sTableName + 's' + @sCRLF
-SET 	@sProcText = @sProcText + @sCRLF
+SET 	@sProcText = @sProcText + 'GO' + @sCRLF
 
 PRINT @sProcText
 
@@ -150,7 +154,7 @@ SET 	@sProcText = ''
 SET 	@sProcText = @sProcText + '----------------------------------------------------------------------------' + @sCRLF
 SET 	@sProcText = @sProcText + '-- Procedimiento de lectura de registos por sincronizar tabla ' + @sTableName + @sCRLF
 SET 	@sProcText = @sProcText + '----------------------------------------------------------------------------' + @sCRLF
-SET 	@sProcText = @sProcText + 'CREATE PROC CMGet' + @sTableName + 's' +  @sCRLF
+SET 	@sProcText = @sProcText + 'CREATE PROC CMGet' + @sTableName + 's @id_emp int ' +  @sCRLF
 
 DECLARE crKeyFields cursor for
 	SELECT	*

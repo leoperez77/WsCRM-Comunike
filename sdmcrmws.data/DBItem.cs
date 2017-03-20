@@ -91,5 +91,41 @@ namespace sdmcrmws.data
 
             return obj;
         }
+
+        public static wsControl MarcarItemSincronizar(int IdItem)
+        {
+            wsControl obj = new wsControl();
+            obj.FechaHora = DateTime.Now.ToString();
+            obj.Origen = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+            try
+            {                
+
+                DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMSynccot_items");
+                DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, IdItem);
+
+                try
+                {
+                    DBCommon.dbConn.ExecuteNonQuery(cmd);
+                }
+                catch
+                {                    
+                    throw;
+                }                
+
+                obj.Estado = "ok";
+            }
+            catch (Exception ex)
+            {
+                obj.Estado = "error";
+                obj.Error = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    obj.Error += Environment.NewLine + ex.InnerException.Message;
+                }
+            }
+
+            return obj;
+        }
     }
 }

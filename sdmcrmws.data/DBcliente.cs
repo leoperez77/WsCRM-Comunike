@@ -172,7 +172,7 @@ namespace sdmcrmws.data
                 {
                     wsCliente cliente = clientes[i];
 
-                    DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMSynccot_clientes");
+                    DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMSynccot_cliente");
                     DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, int.Parse(cliente.Campo_1));
                     
                     try
@@ -200,13 +200,104 @@ namespace sdmcrmws.data
 
             return obj;
         }
+        
+        public static wsControl MarcarClienteSincronizar(string IdCliente)
+        {
+            wsControl obj = new wsControl();
+            obj.FechaHora = DateTime.Now.ToString();
+            obj.Origen = System.Reflection.MethodBase.GetCurrentMethod().Name;
 
-        //public static DataTable GetItemByCodigo(string Codigo, int IdEmpresa)
-        //{
-        //    DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("GetItemByCodigo");
-        //    DBCommon.dbConn.AddInParameter(cmd, "Codigo", DbType.String, Codigo);
-        //    DBCommon.dbConn.AddInParameter(cmd, "IdEmpresa", DbType.Int32, IdEmpresa);
-        //    return DBCommon.dbConn.ExecuteDataSet(cmd).Tables[0];
-        //}
+            try
+            {
+                DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMSynccot_cliente");
+                DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, int.Parse(IdCliente));
+
+                try
+                {
+                    DBCommon.dbConn.ExecuteNonQuery(cmd);
+                }
+                catch
+                {
+                    throw;
+                }
+
+                obj.Estado = "ok";
+            }
+            catch (Exception ex)
+            {
+                obj.Estado = "error";
+                obj.Error = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    obj.Error += Environment.NewLine + ex.InnerException.Message;
+                }
+            }
+
+            return obj;
+        }
+                
+        public static List<wsContacto> GetContactosSincronizar(string IdEmpresa)
+        {
+            List<wsContacto> results = new List<wsContacto>();
+
+            DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMGetcot_cliente_contactos");
+            DBCommon.dbConn.AddInParameter(cmd, "@id_emp", DbType.Int16, int.Parse(IdEmpresa));
+
+            //((RefCountingDataReader)db.ExecuteReader(command)).InnerReader as SqlDataReader;
+            using (IDataReader dr = DBCommon.dbConn.ExecuteReader(cmd))
+            {
+                while (dr.Read())
+                {
+                    wsContacto obj = new wsContacto();
+                    int iCampo = 1;
+                    for (int i = 0; i < dr.FieldCount; i++)
+                    {
+                        obj["Campo_" + iCampo.ToString()] = !dr.IsDBNull(i) ? dr.GetString(i) : "";
+                        iCampo++;
+                    }
+
+                    results.Add(obj);
+
+                }
+                dr.Close();
+            }
+
+            return results;
+        }
+
+        public static wsControl MarcarContactoSincronizar(string IdContacto)
+        {
+            wsControl obj = new wsControl();
+            obj.FechaHora = DateTime.Now.ToString();
+            obj.Origen = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+            try
+            {
+                DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMSynccot_contacto");
+                DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, int.Parse(IdContacto));
+
+                try
+                {
+                    DBCommon.dbConn.ExecuteNonQuery(cmd);
+                }
+                catch
+                {
+                    throw;
+                }
+
+                obj.Estado = "ok";
+            }
+            catch (Exception ex)
+            {
+                obj.Estado = "error";
+                obj.Error = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    obj.Error += Environment.NewLine + ex.InnerException.Message;
+                }
+            }
+
+            return obj;
+        }
     }
 }

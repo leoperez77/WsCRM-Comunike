@@ -107,5 +107,92 @@ namespace smdcrmws
         {
             return DBMaestro.GetMaestro(IdEmpresa, "CMGettipo_tributarios");
         }
+
+        public List<wsMaestro> GetPaisesSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_cliente_paises");
+        }
+
+        public List<wsMaestro> GetBarriosSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_cliente_barrios");
+        }
+
+        public List<wsMaestro> GetEstadosClienteSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_estados");
+        }
+
+        public List<wsMaestro> GetGruposSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_grupos");
+        }
+
+        public List<wsMaestro> GetSubgruposSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_grupo_subs");
+        }
+
+        public List<wsMaestro> GetBodegasSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_bodegas");
+        }
+
+        public List<wsMaestro> GetTallasSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_item_tallas");
+        }
+
+        public List<wsMaestro> GetColoresSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_item_tallas");
+        }
+
+        public List<wsMaestro> GetCategoriasSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_item_categorias");
+        }
+
+        public List<wsMaestro> GetUnidadesSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_unidades");
+        }
+
+        public wsControl MarcarClienteSync(string IdCliente)
+        {
+            return DBcliente.MarcarClienteSincronizar(IdCliente);
+        }
+
+        public wsControl MarcarItemSync(string IdItem)
+        {
+            return DBItem.MarcarItemSincronizar(int.Parse(IdItem));
+        }
+
+        public List<wsContacto> GetContactosSync(string IdEmpresa)
+        {
+            return DBcliente.GetContactosSincronizar(IdEmpresa);
+        }
+
+        public List<wsMaestro> GetBancosSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_item_tallas");
+        }
+
+        public List<wsMaestro> GetProfesionesSync(string IdEmpresa)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<wsMaestro> GetCargosSync(string IdEmpresa)
+        {
+            throw new NotImplementedException();
+        }
+
+        public wsControl MarcarContactoSync(string IdContacto)
+        {
+            return DBcliente.MarcarContactoSincronizar(IdContacto);
+        }
+
+     
     }
 }
