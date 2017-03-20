@@ -175,17 +175,17 @@ namespace smdcrmws
 
         public List<wsMaestro> GetBancosSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_item_tallas");
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGettes_bancos");
         }
 
         public List<wsMaestro> GetProfesionesSync(string IdEmpresa)
         {
-            throw new NotImplementedException();
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_profesiones");            
         }
 
         public List<wsMaestro> GetCargosSync(string IdEmpresa)
-        {
-            throw new NotImplementedException();
+        {            
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_cliente_cargos");
         }
 
         public wsControl MarcarContactoSync(string IdContacto)
@@ -193,6 +193,39 @@ namespace smdcrmws
             return DBcliente.MarcarContactoSincronizar(IdContacto);
         }
 
-     
+        public List<wsMaestro> GetActividadesSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_cliente_actividades");
+        }
+
+        public List<wsMaestro> GetFormasPagoSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_formas_pago");
+        }
+
+        public List<wsMaestro> GetTiposClienteSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_cliente_tipos");
+        }
+
+        public List<wsMaestro> GetPerfilesClienteSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_cliente_perfiles");
+        }
+
+        public List<wsMaestro> GetSubgrupos3Sync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_grupo_subgrupos3");
+        }
+
+        public List<wsMaestro> GetSubgrupos4Sync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_grupo_subgrupos4");
+        }
+
+        public List<wsMaestro> GetSubgrupos5Sync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_grupo_subgrupos5");
+        }
     }
 }

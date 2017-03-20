@@ -118,6 +118,34 @@ namespace smdcrmws
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "MarcarContactoSync/{IdContacto}")]
         wsControl MarcarContactoSync(string IdContacto);
 
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getActividadesSync/{IDEmpresa}")]
+        List<wsMaestro> GetActividadesSync(string IdEmpresa);
+        
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getFormasPagoSync/{IDEmpresa}")]
+        List<wsMaestro> GetFormasPagoSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getTiposClienteSync/{IDEmpresa}")]
+        List<wsMaestro> GetTiposClienteSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getPerfilesClienteSync/{IDEmpresa}")]
+        List<wsMaestro> GetPerfilesClienteSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubgrupos3Sync/{IDEmpresa}")]
+        List<wsMaestro> GetSubgrupos3Sync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubgrupos4Sync/{IDEmpresa}")]
+        List<wsMaestro> GetSubgrupos4Sync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubgrupos5Sync/{IDEmpresa}")]
+        List<wsMaestro> GetSubgrupos5Sync(string IdEmpresa);
+
         //[OperationContract]
         //[WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, UriTemplate = "putClientesSync")]
         //int PutClientesSync(Stream JSONdataStream);

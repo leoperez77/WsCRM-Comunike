@@ -82,7 +82,7 @@ select top 5
 	campo_39 = ltrim(rtrim(n.ape1)),											-- nombre 4
 	campo_40 = ltrim(rtrim(n.ape2)),											-- nombre 5
 	campo_41 = ltrim(rtrim(convert(varchar, c.id_emp))),						-- id empresa	
-	campo_42 = '',
+	campo_42 = ltrim(rtrim(convert(varchar, id_cot_forma_pago))),				-- id forma de pago, se relaciona con la tabla cot_forma_pago
 	campo_43 = '',
 	campo_44 = '',
 	campo_45 = '',
@@ -637,4 +637,256 @@ begin
 end 
 go
 
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGettes_bancos')
+	DROP PROC CMGettes_bancos
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla tes_bancos
+----------------------------------------------------------------------------
+CREATE PROC CMGettes_bancos @id_emp int 
+AS
 
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id))),
+	campo_2 = ltrim(rtrim(convert(varchar,cuenta_bancaria))),
+	campo_3 = ltrim(rtrim(convert(varchar,codigo))),
+	campo_4 = ltrim(rtrim(convert(varchar,nombre))),
+	campo_5 = ltrim(rtrim(convert(varchar,direccion))),
+	campo_6 = ltrim(rtrim(convert(varchar,telefono))),
+	campo_7 = ltrim(rtrim(convert(varchar,contacto))),
+	campo_8 = ltrim(rtrim(convert(varchar,notas))),
+	campo_9 = '',	
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''	
+ FROM	tes_bancos
+ where id_emp = @id_emp
+GO
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_profesiones')
+	DROP PROC CMGetcot_profesiones
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_profesion
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_profesiones @id_emp int 
+AS
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id_emp))),
+	campo_2 = ltrim(rtrim(convert(varchar,id))),
+	campo_3 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_4 = ltrim(rtrim(convert(varchar,idv))),
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',	
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''	
+ FROM	cot_profesion
+ where id_emp = @id_emp
+GO
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_cliente_cargos')
+	DROP PROC CMGetcot_cliente_cargos
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_cliente_cargo
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_cliente_cargos @id_emp int 
+AS
+
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id_emp))),
+	campo_2 = ltrim(rtrim(convert(varchar,id))),
+	campo_3 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_4 = '',
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	cot_cliente_cargo
+ where id_emp = @id_emp
+GO
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_cliente_actividades')
+	DROP PROC CMGetcot_cliente_actividades
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_cliente_actividad
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_cliente_actividades @id_emp int 
+AS
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id_emp))),
+	campo_2 = ltrim(rtrim(convert(varchar,id))),
+	campo_3 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_4 = dbo.CMFormatoFecha(fecha_modif),
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	cot_cliente_actividad
+  where id_emp = @id_emp
+GO
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_formas_pago')
+	DROP PROC CMGetcot_forma_pagos
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_forma_pago
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_formas_pago @id_emp int 
+AS
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id_emp))),
+	campo_2 = ltrim(rtrim(convert(varchar,id))),
+	campo_3 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_4 = ltrim(rtrim(convert(varchar,explicacion))),
+	campo_5 = ltrim(rtrim(convert(varchar,dias_credito))),
+	campo_6 = ltrim(rtrim(convert(varchar,tipo))),
+	campo_7 = ltrim(rtrim(convert(varchar,dias_gracia))),
+	campo_8 = dbo.CMFormatoFecha(fecha_modif),
+	campo_9 = ltrim(rtrim(convert(varchar,descuento_pie))),
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	cot_forma_pago
+ where id_emp = @id_emp
+GO
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_cliente_tipos')
+	DROP PROC CMGetcot_cliente_tipos
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_cliente_tipo
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_cliente_tipos @id_emp int 
+AS
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id_emp))),
+	campo_2 = ltrim(rtrim(convert(varchar,id))),
+	campo_3 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_4 = dbo.CMFormatoFecha(fecha_modif),	
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	cot_cliente_tipo
+  where id_emp = @id_emp
+GO
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_cliente_perfiles')
+	DROP PROC CMGetcot_cliente_perfiles
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_cliente_perfil
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_cliente_perfiles @id_emp int 
+AS
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id_emp))),
+	campo_2 = ltrim(rtrim(convert(varchar,id))),
+	campo_3 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_4 = dbo.CMFormatoFecha(fecha_modif),
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''	
+ FROM	cot_cliente_perfil
+ where id_emp = @id_emp
+GO
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_grupo_subgrupos3')
+	DROP PROC CMGetcot_grupo_subgrupos3
+GO
+
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_grupo_sub3
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_grupo_subgrupos3 @id_emp int 
+AS
+
+select id_emp,
+	campo_1 = ltrim(rtrim(convert(varchar,id_cot_grupo_sub))),				-- id del subgrupo padre
+	campo_2 = ltrim(rtrim(convert(varchar,s3.id))),
+	campo_3 = ltrim(rtrim(convert(varchar,s3.descripcion))),
+	campo_4 = dbo.CMFormatoFecha(s3.fecha_modif),
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	cot_grupo_sub3 s3
+	join cot_grupo_sub s on s.id = s3.id_cot_grupo_sub
+	join cot_grupo g on g.id = s.id_cot_grupo
+WHERE g.id_emp = @id_emp
+GO
+
+
+
+
+makeselectallsp 'cot_grupo_sub3'
+
+select top 10 *
+from cot_grupo_sub3
+
+select top 10 *
+from cot_grupo_sub4
+
+select top 10 *
+from cot_grupo_sub5
+
+
+
+
+select *
+from cot_cliente
+where nit='71790599'
+
+CMGettes_bancos 320
