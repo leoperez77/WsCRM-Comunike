@@ -165,7 +165,7 @@ namespace smdcrmws
 
         public wsControl MarcarItemSync(string IdItem)
         {
-            return DBItem.MarcarItemSincronizar(int.Parse(IdItem));
+            return DBItem.MarcarItemSincronizado(int.Parse(IdItem));
         }
 
         public List<wsContacto> GetContactosSync(string IdEmpresa)
@@ -226,6 +226,36 @@ namespace smdcrmws
         public List<wsMaestro> GetSubgrupos5Sync(string IdEmpresa)
         {
             return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_grupo_subgrupos5");
+        }
+
+        public List<wsMaestro> GetMarcasVehSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetveh_marcas");
+        }
+
+        public List<wsMaestro> GetLineasVehSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetveh_lineas");
+        }
+
+        public List<wsMaestro> GetClasesVehSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetveh_clases");
+        }
+
+        public List<wsMaestro> GetTiposServicioVehSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetveh_servicios");
+        }
+
+        public List<wsLineaModelo> GetModelosLineaVehSync(string IdEmpresa)
+        {
+            return DBVehiculos.GetModelosLinea(IdEmpresa);
+        }
+
+        public wsControl MarcarModeloLineaSync(string IdModeloLinea)
+        {
+            return DBVehiculos.MarcarModeloLineaSincronizado(int.Parse(IdModeloLinea));
         }
     }
 }

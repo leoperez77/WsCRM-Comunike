@@ -46,6 +46,7 @@
     <Compile Include="wsContacto.cs" />
     <Compile Include="wsControl.cs" />
     <Compile Include="wsItem.cs" />
+    <Compile Include="wsLineaModelo.cs" />
     <Compile Include="wsMaestro.cs" />
     <Compile Include="wsOperario.cs" />
   </ItemGroup>

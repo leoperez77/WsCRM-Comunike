@@ -92,7 +92,7 @@ namespace sdmcrmws.data
             return obj;
         }
 
-        public static wsControl MarcarItemSincronizar(int IdItem)
+        public static wsControl MarcarItemSincronizado(int IdItem)
         {
             wsControl obj = new wsControl();
             obj.FechaHora = DateTime.Now.ToString();

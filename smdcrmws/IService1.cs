@@ -146,6 +146,33 @@ namespace smdcrmws
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubgrupos5Sync/{IDEmpresa}")]
         List<wsMaestro> GetSubgrupos5Sync(string IdEmpresa);
 
+        //vehículos
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getMarcasVehSync/{IDEmpresa}")]
+        List<wsMaestro> GetMarcasVehSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getLineasVehSync/{IDEmpresa}")]
+        List<wsMaestro> GetLineasVehSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getClasesVehSync/{IDEmpresa}")]
+        List<wsMaestro> GetClasesVehSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getTiposServicioVehSync/{IDEmpresa}")]
+        List<wsMaestro> GetTiposServicioVehSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getModelosLineaVehSync/{IDEmpresa}")]
+        List<wsLineaModelo> GetModelosLineaVehSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "MarcarModeloLineaSync/{IdModeloLinea}")]
+        wsControl MarcarModeloLineaSync(string IdModeloLinea);
+
+
         //[OperationContract]
         //[WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, UriTemplate = "putClientesSync")]
         //int PutClientesSync(Stream JSONdataStream);

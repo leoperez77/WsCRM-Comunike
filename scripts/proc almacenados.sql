@@ -868,10 +868,198 @@ select id_emp,
 WHERE g.id_emp = @id_emp
 GO
 
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_grupo_subgrupos4')
+	DROP PROC CMGetcot_grupo_subgrupos4
+GO
+
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_grupo_sub3
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_grupo_subgrupos4 @id_emp int 
+AS
+
+select id_emp,
+	campo_1 = ltrim(rtrim(convert(varchar,id_cot_grupo_sub3))),				-- id del subgrupo padre
+	campo_2 = ltrim(rtrim(convert(varchar,s4.id))),
+	campo_3 = ltrim(rtrim(convert(varchar,s4.descripcion))),
+	campo_4 = dbo.CMFormatoFecha(s4.fecha_modif),
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	cot_grupo_sub4 s4
+	join cot_grupo_sub3 s3 on s4.id_cot_grupo_sub3 = s3.id
+	join cot_grupo_sub s on s.id = s3.id_cot_grupo_sub
+	join cot_grupo g on g.id = s.id_cot_grupo
+WHERE g.id_emp = @id_emp
+GO
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_grupo_subgrupos5')
+	DROP PROC CMGetcot_grupo_subgrupos5
+GO
+
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_grupo_sub3
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_grupo_subgrupos5 @id_emp int 
+AS
+
+select id_emp,
+	campo_1 = ltrim(rtrim(convert(varchar,s5.id_cot_grupo_sub4))),				-- id del subgrupo padre
+	campo_2 = ltrim(rtrim(convert(varchar,s5.id))),
+	campo_3 = ltrim(rtrim(convert(varchar,s5.descripcion))),
+	campo_4 = dbo.CMFormatoFecha(s5.fecha_modif),
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	cot_grupo_sub5 s5
+	join cot_grupo_sub4 s4 on s5.id_cot_grupo_sub4 = s4.id
+	join cot_grupo_sub3 s3 on s4.id_cot_grupo_sub3 = s3.id
+	join cot_grupo_sub s on s.id = s3.id_cot_grupo_sub
+	join cot_grupo g on g.id = s.id_cot_grupo
+WHERE g.id_emp = @id_emp
+GO
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetveh_marcas')
+	DROP PROC CMGetveh_marcas
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla veh_marca
+----------------------------------------------------------------------------
+CREATE PROC CMGetveh_marcas @id_emp int 
+AS
+
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id))),
+	campo_2 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_3 = dbo.CMFormatoFecha(fecha_modif),
+	campo_4 = '',
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	veh_marca
+GO
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetveh_lineas')
+	DROP PROC CMGetveh_lineas
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla veh_linea
+----------------------------------------------------------------------------
+CREATE PROC CMGetveh_lineas @id_emp int 
+AS
+
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id))),
+	campo_2 = ltrim(rtrim(convert(varchar,id_veh_marca))),
+	campo_3 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_4 = dbo.CMFormatoFecha(fecha_creacion),
+	campo_5 = ltrim(rtrim(convert(varchar,clase))),							-- Clase de vehículo, viene de la tabla veh_clase (automovil, campero.. )
+	campo_6 = dbo.CMFormatoFecha(fecha_modif),
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	veh_linea
+GO
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetveh_clases')
+	DROP PROC CMGetveh_clases
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla veh_clase
+----------------------------------------------------------------------------
+CREATE PROC CMGetveh_clases @id_emp int 
+AS
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id))),
+	campo_2 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_3 = '',
+	campo_4 = '',
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	veh_clase
+GO
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetveh_servicios')
+	DROP PROC CMGetveh_servicios
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla veh_servicio
+----------------------------------------------------------------------------
+CREATE PROC CMGetveh_servicios @id_emp int 
+AS
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id))),
+	campo_2 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_3 = '',
+	campo_4 = '',
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	veh_servicio
+GO
 
 
 
-makeselectallsp 'cot_grupo_sub3'
+select * from veh_linea
+select * from veh_clase
+select * from veh_servicio
+
+sp_helptext GetVehClaseServicio
+
+
+GetVehClaseServicio 320
+
+
+makeselectallsp 'veh_servicio'
 
 select top 10 *
 from cot_grupo_sub3

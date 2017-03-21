@@ -57,6 +57,7 @@
     <Compile Include="DBItem.cs" />
     <Compile Include="DBMaestro.cs" />
     <Compile Include="DBUsuario.cs" />
+    <Compile Include="DBVehiculos.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
