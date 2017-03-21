@@ -24,6 +24,9 @@ namespace smdcrmws.dto
         [DataMember]
         public string FechaHora { get; set; }
 
+        [DataMember]
+        public string IdGenerado { get; set; }
+
         public object this[string propertyName]
         {
             get

@@ -13,17 +13,13 @@ namespace smdcrmws
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IService1" in both code and config file together.
     [ServiceContract]
     public interface ISmdcrmws
-    {
-
-        [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getData/{value}")]
-        string GetData(string value);
+    {       
 
         [OperationContract]
         CompositeType GetDataUsingDataContract(CompositeType composite);
                 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getClientesSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getClientesSync/{IdEmpresa}")]
         List<wsCliente> GetClientesSync(string IdEmpresa);
 
         [OperationContract]
@@ -39,11 +35,11 @@ namespace smdcrmws
         wsControl PutClientesSync(Stream JSONdataStream);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getOperariosSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getOperariosSync/{IdEmpresa}")]
         List<wsOperario> GetOperariosSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getItemsSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getItemsSync/{IdEmpresa}")]
         List<wsItem> GetItemsSync(string IdEmpresa);
 
         [OperationContract]
@@ -55,63 +51,63 @@ namespace smdcrmws
         wsControl PutItemsSync(Stream JSONdataStream);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getTiposTributariosSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getTiposTributariosSync/{IdEmpresa}")]
         List<wsMaestro> GetTiposTributariosSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getPaisesSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getPaisesSync/{IdEmpresa}")]
         List<wsMaestro> GetPaisesSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getBarriosSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getBarriosSync/{IdEmpresa}")]
         List<wsMaestro> GetBarriosSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getEstadosClienteSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getEstadosClienteSync/{IdEmpresa}")]
         List<wsMaestro> GetEstadosClienteSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getGruposSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getGruposSync/{IdEmpresa}")]
         List<wsMaestro> GetGruposSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubgruposSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubgruposSync/{IdEmpresa}")]
         List<wsMaestro> GetSubgruposSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getBodegasSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getBodegasSync/{IdEmpresa}")]
         List<wsMaestro> GetBodegasSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getTallasSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getTallasSync/{IdEmpresa}")]
         List<wsMaestro> GetTallasSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getColoresSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getColoresSync/{IdEmpresa}")]
         List<wsMaestro> GetColoresSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getCategoriasSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getCategoriasSync/{IdEmpresa}")]
         List<wsMaestro> GetCategoriasSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getUnidadesSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getUnidadesSync/{IdEmpresa}")]
         List<wsMaestro> GetUnidadesSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getContactosSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getContactosSync/{IdEmpresa}")]
         List<wsContacto> GetContactosSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getBancosSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getBancosSync/{IdEmpresa}")]
         List<wsMaestro> GetBancosSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getProfesionesSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getProfesionesSync/{IdEmpresa}")]
         List<wsMaestro> GetProfesionesSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getCargosSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getCargosSync/{IdEmpresa}")]
         List<wsMaestro> GetCargosSync(string IdEmpresa);
 
         [OperationContract]
@@ -119,59 +115,66 @@ namespace smdcrmws
         wsControl MarcarContactoSync(string IdContacto);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getActividadesSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getActividadesSync/{IdEmpresa}")]
         List<wsMaestro> GetActividadesSync(string IdEmpresa);
         
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getFormasPagoSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getFormasPagoSync/{IdEmpresa}")]
         List<wsMaestro> GetFormasPagoSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getTiposClienteSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getTiposClienteSync/{IdEmpresa}")]
         List<wsMaestro> GetTiposClienteSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getPerfilesClienteSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getPerfilesClienteSync/{IdEmpresa}")]
         List<wsMaestro> GetPerfilesClienteSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubgrupos3Sync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubgrupos3Sync/{IdEmpresa}")]
         List<wsMaestro> GetSubgrupos3Sync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubgrupos4Sync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubgrupos4Sync/{IdEmpresa}")]
         List<wsMaestro> GetSubgrupos4Sync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubgrupos5Sync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubgrupos5Sync/{IdEmpresa}")]
         List<wsMaestro> GetSubgrupos5Sync(string IdEmpresa);
 
         //vehículos
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getMarcasVehSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getMarcasVehSync/{IdEmpresa}")]
         List<wsMaestro> GetMarcasVehSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getLineasVehSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getLineasVehSync/{IdEmpresa}")]
         List<wsMaestro> GetLineasVehSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getClasesVehSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getClasesVehSync/{IdEmpresa}")]
         List<wsMaestro> GetClasesVehSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getTiposServicioVehSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getTiposServicioVehSync/{IdEmpresa}")]
         List<wsMaestro> GetTiposServicioVehSync(string IdEmpresa);
 
         [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getModelosLineaVehSync/{IDEmpresa}")]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getModelosLineaVehSync/{IdEmpresa}")]
         List<wsLineaModelo> GetModelosLineaVehSync(string IdEmpresa);
 
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "MarcarModeloLineaSync/{IdModeloLinea}")]
         wsControl MarcarModeloLineaSync(string IdModeloLinea);
 
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getModelosAnoSync/{IdEmpresa}")]
+        List<wsItem> GetModelosAnoSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putEncabezadoHn")]
+        wsControl PutEncabezadoHn(Stream JSONdataStream);
 
         //[OperationContract]
         //[WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, UriTemplate = "putClientesSync")]

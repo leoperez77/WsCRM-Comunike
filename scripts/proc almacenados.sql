@@ -160,6 +160,7 @@ select
  WHERE es_operario = 1 and id_emp = @id_emp
 GO
 
+
 IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_items')
 	DROP PROC CMGetcot_items
 go
@@ -167,7 +168,7 @@ go
 ----------------------------------------------------------------------------
 -- Procedimiento de lectura de registros por sincronizar tabla cot_item
 ----------------------------------------------------------------------------
-CREATE PROC CMGetcot_items @id_emp int
+CREATE PROC CMGetcot_items @id_emp int, @vehiculos int
 AS
 
 select top 5 
@@ -209,7 +210,7 @@ select top 5
 	campo_36 = ltrim(rtrim(convert(varchar,precio_und3))),
 	campo_37 = ltrim(rtrim(convert(varchar,precio_und4))),
 	campo_38 = ltrim(rtrim(convert(varchar,precio_und2))),
-	campo_39 = '',
+	campo_39 = ltrim(rtrim(convert(varchar,id_veh_ano))),					-- Indica el modelo al que pertenece el item cuando es vehículo
 	campo_40 = '',
 	campo_41 = '',
 	campo_42 = '',
@@ -233,12 +234,13 @@ select top 5
 	campo_60 = ''
  FROM	cot_item i
 	join cot_grupo_sub s on i.id_cot_grupo_sub = s.id
-	join cot_iva v on i.id_cot_iva = v.id
+	left join cot_iva v on i.id_cot_iva = v.id
 	left join cot_item_talla t on t.id = i.id_cot_item_talla
 	left join cot_item_color c on c.id = i.id_cot_item_color
 	left join cm_logcambios l on l.tabla = 'cot_item' and l.idvalor = i.id
  WHERE i.id_emp = @id_emp 
-	and id_veh_ano is null and isnull(l.estado,0) in (0,2)
+	and ((@vehiculos = 0 and id_veh_ano is null) or (@vehiculos = 1 and id_veh_ano is not null))
+	and isnull(l.estado,0) in (0,2)
 order by i.id
 GO
 
@@ -750,7 +752,7 @@ select
 GO
 
 IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_formas_pago')
-	DROP PROC CMGetcot_forma_pagos
+	DROP PROC CMGetcot_formas_pago
 GO
 ----------------------------------------------------------------------------
 -- Procedimiento de lectura de registos por sincronizar tabla cot_forma_pago
@@ -996,6 +998,7 @@ GO
 IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetveh_clases')
 	DROP PROC CMGetveh_clases
 GO
+
 ----------------------------------------------------------------------------
 -- Procedimiento de lectura de registos por sincronizar tabla veh_clase
 ----------------------------------------------------------------------------
@@ -1047,34 +1050,97 @@ select
  FROM	veh_servicio
 GO
 
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetveh_linea_modelos')
+	DROP PROC CMGetveh_linea_modelos
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla veh_linea_modelo
+----------------------------------------------------------------------------
+CREATE PROC CMGetveh_linea_modelos @id_emp int 
+AS
+
+select top 5 
+	campo_1 = ltrim(rtrim(convert(varchar,v.id))),
+	campo_2 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_3 = dbo.CMFormatoFecha(fecha_creacion),
+	campo_4 = ltrim(rtrim(convert(varchar,precio))),
+	campo_5 = ltrim(rtrim(convert(varchar,moneda_precio))),
+	campo_6 = ltrim(rtrim(convert(varchar,tipo))),
+	campo_7 = ltrim(rtrim(convert(varchar,motor))),
+	campo_8 = ltrim(rtrim(convert(varchar,cilindrada))),
+	campo_9 = ltrim(rtrim(convert(varchar,potencia))),
+	campo_10 = ltrim(rtrim(convert(varchar,velocidad_max))),
+	campo_11 = ltrim(rtrim(convert(varchar,aceleracion))),
+	campo_12 = ltrim(rtrim(convert(varchar,valvulas))),
+	campo_13 = ltrim(rtrim(convert(varchar,caja))),
+	campo_14 = ltrim(rtrim(convert(varchar,frenos))),
+	campo_15 = ltrim(rtrim(convert(varchar,control_frenos))),
+	campo_16 = ltrim(rtrim(convert(varchar,largo))),
+	campo_17 = ltrim(rtrim(convert(varchar,ancho))),
+	campo_18 = ltrim(rtrim(convert(varchar,baul))),
+	campo_19 = ltrim(rtrim(convert(varchar,peso))),
+	campo_20 = ltrim(rtrim(convert(varchar,aire_acondicionado))),
+	campo_21 = ltrim(rtrim(convert(varchar,direccion_hidraulica))),
+	campo_22 = ltrim(rtrim(convert(varchar,vidrios_electricos))),
+	campo_23 = ltrim(rtrim(convert(varchar,rines))),
+	campo_24 = ltrim(rtrim(convert(varchar,espejos))),
+	campo_25 = ltrim(rtrim(convert(varchar,airbags))),
+	campo_26 = ltrim(rtrim(convert(varchar,cd))),
+	campo_27 = ltrim(rtrim(convert(varchar,mp3))),
+	campo_28 = ltrim(rtrim(convert(varchar,dvd))),
+	campo_29 = ltrim(rtrim(convert(varchar,camara))),
+	campo_30 = ltrim(rtrim(convert(varchar,sensor_parqueo))),
+	campo_31 = ltrim(rtrim(convert(varchar,tv))),
+	campo_32 = ltrim(rtrim(convert(varchar,trasmision))),
+	campo_33 = ltrim(rtrim(convert(varchar,combustible))),
+	campo_34 = ltrim(rtrim(convert(varchar,gps))),
+	campo_35 = ltrim(rtrim(convert(varchar,id_veh_linea))),					-- Línea a la que pertenece el modelo tabla veh_linea
+	campo_36 = ltrim(rtrim(convert(varchar,clase))),						-- no está en uso a 20170321				
+	campo_37 = dbo.CMFormatoFecha(fecha_actualizacion),
+	campo_38 = dbo.CMFormatoFecha(fecha_modif),
+	campo_39 = '',
+	campo_40 = '',
+	campo_41 = '',
+	campo_42 = '',
+	campo_43 = '',
+	campo_44 = '',
+	campo_45 = '',
+	campo_46 = '',
+	campo_47 = '',
+	campo_48 = '',
+	campo_49 = '',
+	campo_50 = '',
+	campo_51 = '',
+	campo_52 = '',
+	campo_53 = '',
+	campo_54 = '',
+	campo_55 = '',
+	campo_56 = '',
+	campo_57 = '',
+	campo_58 = '',
+	campo_59 = '',
+	campo_60 = ''
+ FROM	veh_linea_modelo v
+	left join cm_logcambios l on l.tabla = 'veh_linea_modelo' and l.idvalor = v.id
+ WHERE isnull(l.estado,0) in (0,2)
+GO
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMSyncveh_linea_modelo')
+	DROP PROC CMSyncveh_linea_modelo
+GO
+
+create procedure CMSyncveh_linea_modelo
+	@id int
+as
+begin
+	if not exists(select id from cm_logcambios where tabla = 'veh_linea_modelo' and idvalor = @id)
+		insert into cm_logcambios(tabla, idvalor, estado)
+		values('veh_linea_modelo', @id, 99)
+	else
+		update cm_logcambios
+		set estado = 99
+		where tabla = 'veh_linea_modelo' and idvalor = @id
+end 
+go
 
 
-select * from veh_linea
-select * from veh_clase
-select * from veh_servicio
-
-sp_helptext GetVehClaseServicio
-
-
-GetVehClaseServicio 320
-
-
-makeselectallsp 'veh_servicio'
-
-select top 10 *
-from cot_grupo_sub3
-
-select top 10 *
-from cot_grupo_sub4
-
-select top 10 *
-from cot_grupo_sub5
-
-
-
-
-select *
-from cot_cliente
-where nit='71790599'
-
-CMGettes_bancos 320

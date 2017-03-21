@@ -14,11 +14,7 @@ namespace smdcrmws
     // NOTE: In order to launch WCF Test Client for testing this service, please select Service1.svc or Service1.svc.cs at the Solution Explorer and start debugging.
     public class SMDCRM : ISmdcrmws
     {
-        public string GetData(string value)
-        {
-            return string.Format("You entered: {0}", value);
-        }
-
+      
         public CompositeType GetDataUsingDataContract(CompositeType composite)
         {
             if (composite == null)
@@ -85,7 +81,7 @@ namespace smdcrmws
         {
             try
             {
-                return DBItem.GetItemsSincronizar(IdEmpresa);
+                return DBItem.GetItemsSincronizar(IdEmpresa,0);
 
             }
             catch (Exception ex)
@@ -256,6 +252,28 @@ namespace smdcrmws
         public wsControl MarcarModeloLineaSync(string IdModeloLinea)
         {
             return DBVehiculos.MarcarModeloLineaSincronizado(int.Parse(IdModeloLinea));
+        }
+
+        public List<wsItem> GetModelosAnoSync(string IdEmpresa)
+        {
+            try
+            {
+                return DBItem.GetItemsSincronizar(IdEmpresa, 1);
+
+            }
+            catch (Exception ex)
+            {
+                //  Return any exception messages back to the Response header
+                OutgoingWebResponseContext response = WebOperationContext.Current.OutgoingResponse;
+                response.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                response.StatusDescription = ex.Message.Replace("\r\n", "");
+                return null;
+            }
+        }
+
+        public wsControl PutEncabezadoHn(Stream JSONdataStream)
+        {
+            return DBNegocio.PutEncabezadoNegocio(JSONdataStream);
         }
     }
 }

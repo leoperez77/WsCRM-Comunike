@@ -4,17 +4,18 @@ using smdcrmws.dto;
 using System.Data;
 using System.Data.Common;
 using System.IO;
-using System.Web.Script.Serialization;
+using Newtonsoft.Json;
 namespace sdmcrmws.data
 {
     public class DBItem
     {
-        public static List<wsItem> GetItemsSincronizar(string IdEmpresa)
+        public static List<wsItem> GetItemsSincronizar(string IdEmpresa, int Vehiculos)
         {
             List<wsItem> results = new List<wsItem>();
 
             DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMGetcot_items");
             DBCommon.dbConn.AddInParameter(cmd, "@id_emp", DbType.Int16, int.Parse(IdEmpresa));
+            DBCommon.dbConn.AddInParameter(cmd, "@vehiculos", DbType.Int16, Vehiculos);
 
             //((RefCountingDataReader)db.ExecuteReader(command)).InnerReader as SqlDataReader;
             using (IDataReader dr = DBCommon.dbConn.ExecuteReader(cmd))
@@ -49,9 +50,11 @@ namespace sdmcrmws.data
                 // Read in our Stream into a string...
                 StreamReader reader = new StreamReader(JSONdataStream);
                 string JSONdata = reader.ReadToEnd();
+                
+                //JavaScriptSerializer jss = new JavaScriptSerializer();
+                //var Items = jss.Deserialize<List<wsItem>>(JSONdata);
 
-                JavaScriptSerializer jss = new JavaScriptSerializer();
-                var Items = jss.Deserialize<List<wsItem>>(JSONdata);
+                var Items = JsonConvert.DeserializeObject <List<wsItem>>(JSONdata);
 
                 if (Items == null)
                 {
