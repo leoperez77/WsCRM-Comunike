@@ -60,22 +60,4 @@ namespace smdcrmws.dto
         [DataMember]
         public String NotasAprobacion { get; set; }
     }
-
- //   @IdRetorno int output,
- //   @id_emp int,
-	//@id int,
-	//@fecha datetime,
- //   @estado smallint,
-	//@id_cot_tipo int,
-	//@id_cot_bodega int,
-	//@id_cot_cliente_contacto int,
-	//@id_usuario int,
-	//@id_usuario_vende int,
-	//@id_usuario_rev int,
-	//@id_usuario_aprobo int,
-	//@FechaEntrega datetime,
- //   @doc_ref varchar(20),
-	//@notas_reviso varchar(250),
-	//@notas_aprobo varchar(250),
-	//@notas text
 }

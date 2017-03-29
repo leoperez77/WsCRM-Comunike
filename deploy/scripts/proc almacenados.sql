@@ -1143,33 +1143,4 @@ begin
 end 
 go
 
-IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_item_colores')
-	DROP PROC CMGetcot_item_colores
-GO
-----------------------------------------------------------------------------
--- Procedimiento de lectura de registos por sincronizar tabla cot_item_color
-----------------------------------------------------------------------------
-CREATE PROC CMGetcot_item_colores @id_emp int 
-AS
-select top 5 
-	campo_1 = ltrim(rtrim(convert(varchar,id))),
-	campo_2 = ltrim(rtrim(convert(varchar,id_emp))),
-	campo_3 = ltrim(rtrim(convert(varchar,codigo_color))),
-	campo_4 = ltrim(rtrim(convert(varchar,descripcion))),
-	campo_5 = ltrim(rtrim(convert(varchar,idv))),
-	campo_6 = ltrim(rtrim(convert(varchar,fecha_modif))),
-	campo_7 = '',
-	campo_8 = '',
-	campo_9 = '',
-	campo_10 = '',
-	campo_11 = '',
-	campo_12 = '',
-	campo_13 = '',
-	campo_14 = '',
-	campo_15 = ''
- FROM	cot_item_color
- WHERE id_emp = @id_emp
-GO
-
-
 

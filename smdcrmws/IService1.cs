@@ -176,6 +176,10 @@ namespace smdcrmws
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putEncabezadoHn")]
         wsControl PutEncabezadoHn(Stream JSONdataStream);
 
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putCotizacion")]
+        wsControl PutCotizacion(Stream JSONdataStream);
+
         //[OperationContract]
         //[WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, UriTemplate = "putClientesSync")]
         //int PutClientesSync(Stream JSONdataStream);

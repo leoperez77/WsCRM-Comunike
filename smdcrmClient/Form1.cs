@@ -19,25 +19,57 @@ namespace smdcrmClient
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var obj = new smdcrmws.dto.wsNegocio();
-            obj.Id = "0";
-            obj.IdEmpresa = "320";
-            obj.Fecha = "2017-03-21";
-            obj.Estado = "0";
-            obj.TipoDocumento = "4081";
-            obj.Bodega = "300";
-            obj.Contacto = "145557";
-            obj.Usuario = "2985";
-            obj.Vendedor = "2985";
-            obj.UsuarioRevisa = "0";
-            obj.UsuarioAprueba = "0";
-            obj.FechaEntrega = "2017-03-21";
-            obj.DocReferencia = "";
-            obj.Notas = "Notas del documento";
-            obj.NotasAprobacion = "";
-            obj.NotasRevision = "";
+            if (optNegocio.Checked)
+            {
+                var obj = new smdcrmws.dto.wsNegocio();
+                obj.Id = "0";
+                obj.IdEmpresa = "320";
+                obj.Fecha = "2017-03-21";
+                obj.Estado = "0";
+                obj.TipoDocumento = "4081";
+                obj.Bodega = "300";
+                obj.Contacto = "145557";
+                obj.Usuario = "2985";
+                obj.Vendedor = "2985";
+                obj.UsuarioRevisa = "0";
+                obj.UsuarioAprueba = "0";
+                obj.FechaEntrega = "2017-03-21";
+                obj.DocReferencia = "";
+                obj.Notas = "Notas del documento";
+                obj.NotasAprobacion = "";
+                obj.NotasRevision = "";
+                textBox1.Text = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            }
 
-            textBox1.Text = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            if(optCotizacion.Checked)
+            {
+                var obj = new smdcrmws.dto.wsCotizacion();
+                obj.Id = "0";
+                obj.IdEmpresa = "320";
+                obj.Usuario = "2985";
+                obj.Fecha = "2017-04-29";
+                obj.TipoDocumento = "156";
+                obj.Cliente = "223395";
+                obj.Vendedor = "2985";
+                obj.FormaPago = "0";
+                obj.Contacto = "145557";
+                obj.Dias = "30";
+                obj.Subtotal = "89150000";
+                obj.Descuento = "0";
+                obj.Iva = "22274000";
+                obj.Total = "111424000";
+                obj.Estado = "0"; // envía la misma empresa. revisar
+                obj.Moneda = "0";
+                obj.Tasa = "1";
+                obj.FechaEstimada = "2017-05-10";
+                obj.Factibilidad = "50";
+                obj.NotasInternas = "Estas son las notas internas no visibles para el cliente";
+                obj.Notas = "Se incluye seguro todo riesgo";
+                obj.Bodega = "300";
+                obj.Negocio = "0";
+
+                textBox1.Text = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            }
         }
     }
 

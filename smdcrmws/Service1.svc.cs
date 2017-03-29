@@ -141,7 +141,7 @@ namespace smdcrmws
 
         public List<wsMaestro> GetColoresSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_item_tallas");
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_item_colores");
         }
 
         public List<wsMaestro> GetCategoriasSync(string IdEmpresa)
@@ -274,6 +274,11 @@ namespace smdcrmws
         public wsControl PutEncabezadoHn(Stream JSONdataStream)
         {
             return DBNegocio.PutEncabezadoNegocio(JSONdataStream);
+        }
+
+        public wsControl PutCotizacion(Stream JSONdataStream)
+        {
+            return DBNegocio.PutCotizacion(JSONdataStream);
         }
     }
 }
