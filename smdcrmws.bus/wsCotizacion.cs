@@ -169,35 +169,5 @@ namespace smdcrmws.dto
 
     }
 
-    //  @Emp Int,
-    //   @Bod Int,
-    //@Usu Int,
-    //   @Renglon Int,
-    //@IdCot Int,
-    //   @Id Int,
-    //@IdItem Int,
-    //   @Cant Money,
-    //@PrecioLista Money,
-    //   @PrecioCotizado Money,
-    //@Iva Decimal(5,2),
-    //@Notas NVarchar(250),
-    //@preciomasiva Money = 0,
-    //   @porcentaje_descuento Decimal(18,10) = 0,
-    //@id_operario Int = 0,
-    //   @id_cot_item_lote Int = 0,
-    //@porcentaje_descuento_grupo Decimal(18,10) = -1,
-    //@Facturar_A Varchar(1) = '', --usar cuando se necesite
-
-    //   @IdPed Int = 0,
-    //   @TipoTran Int = 0,
-    //@EsDevRemi Bit = 0,
-    //   @conv Dec(28,16) = 1,
-    //@und Smallint = 0,
-    //   @can_tot_dis Money = 0,
-    //@bod_dest Int = 0,
-    //   @descu_escal Money = 0,
-    //@ignorar_stock Bit = 0,
-    //   @coscia Smallint = -1,
-    //@id_promo Int = 0,
-    //   @quitar_en_dic2016 Int=0
+    
 }

@@ -321,5 +321,10 @@ namespace smdcrmws
         {
             return DBPedido.PutPedido(JSONdataStream);
         }
+
+        public List<wsStock> GetStock(string IdItem, string IdBodega)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
