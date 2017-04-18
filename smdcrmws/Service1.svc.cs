@@ -45,16 +45,12 @@ namespace smdcrmws
             }
         }
 
-        //public wsControl PutClientesSync(Stream JSONdataStream)
-        //{
-        //    return DBcliente.PutClientesSincronizar(JSONdataStream);
-        //}
-
+     
         public wsControl PutClienteSync(Stream JSONdataStream)
         {
             return DBcliente.PutClienteSincronizar(JSONdataStream);
         }
-
+        
         public wsControl PutClientesSync(Stream JSONdataStream)
         {
             return DBcliente.PutClientesSincronizar(JSONdataStream);
@@ -224,6 +220,16 @@ namespace smdcrmws
             return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_grupo_subgrupos5");
         }
 
+        public List<wsMaestro> GetZonasSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_zonas");
+        }
+
+        public List<wsMaestro> GetSubzonasSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_zona_subs");
+        }
+
         public List<wsMaestro> GetMarcasVehSync(string IdEmpresa)
         {
             return DBMaestro.GetMaestro(IdEmpresa, "CMGetveh_marcas");
@@ -279,6 +285,36 @@ namespace smdcrmws
         public wsControl PutCotizacion(Stream JSONdataStream)
         {
             return DBNegocio.PutCotizacion(JSONdataStream);
+        }
+
+        public wsControl PutCliente(Stream JSONdataStream)
+        {
+            return DBcliente.PutCliente(JSONdataStream);
+        }
+
+        public wsControl PutCotCliente(Stream JSONdataStream)
+        {
+            return DBcliente.PutCliente(JSONdataStream);
+        }
+
+        public List<wsVehiculo> GetVehiculosSync(string IdEmpresa)
+        {
+            return DBVehiculos.GetVehiculos(IdEmpresa);
+        }
+
+        public wsControl MarcarVehiculoSync(string IdVehiculo)
+        {
+            return DBVehiculos.MarcarVehiculoSincronizado(int.Parse(IdVehiculo));
+        }
+
+        public wsControl PutOrdenTaller(Stream JSONdataStream)
+        {
+            return DBOrden.PutOrden(JSONdataStream);
+        }
+
+        public List<wsMaestro> GetMotivosIngresoSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(IdEmpresa, "CMGettal_motivo_ingresos");
         }
     }
 }

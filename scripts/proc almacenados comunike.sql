@@ -53,7 +53,7 @@ select top 5
 	campo_26 = format(c.fecha_modificacion, 'yyyy-MM-dd hh:mm', 'en-US'),		-- Fecha en la que se modifico el tercero
 	campo_27 = ltrim(rtrim(convert(varchar,
 		case when o.ano_cumple is not null and mes_dia_cumple is not null then
-		cast(cast(ano_cumple as varchar) + 
+		try_cast(cast(ano_cumple as varchar) + 
 			cast(right(mes_dia_cumple,2) as varchar) +
 			replicate('0',2-len(left(mes_dia_cumple,len(mes_dia_cumple)-2))) + 
 			left(mes_dia_cumple,len(mes_dia_cumple)-2) as date)
@@ -61,7 +61,7 @@ select top 5
 	campo_28 = ltrim(rtrim(convert(varchar(max),c.notas))),						-- Notas del tercero
 	campo_29 = ltrim(rtrim(convert(varchar, 
 	case when o.ano_cumple is not null and mes_dia_cumple is not null then	
-		DATEDIFF( YY, cast(cast(ano_cumple as varchar) + 
+		DATEDIFF( YY, try_cast(cast(ano_cumple as varchar) + 
 			cast(right(mes_dia_cumple,2) as varchar) +
 			replicate('0',2-len(left(mes_dia_cumple,len(mes_dia_cumple)-2))) + 
 			left(mes_dia_cumple,len(mes_dia_cumple)-2) as date), GETDATE() ) 
@@ -73,7 +73,7 @@ select top 5
 	))),																		-- Sexo tercero 
 	campo_31 = ltrim(rtrim(c.razon_social)),									-- Razon comercial 
 	campo_32 = ltrim(rtrim(convert(varchar, ''))),								-- Usuario que creo o modificó, no disponible
-	campo_33 = ltrim(rtrim(convert(varchar, 0))),								-- pos_num no se usa
+	campo_33 = ltrim(rtrim(convert(varchar, cupo_credito))),					-- cupo de crédito
 	campo_34 = ltrim(rtrim(convert(varchar, id_cot_estado))),					-- tabla cot_estado
 	campo_35 = ltrim(rtrim(convert(varchar, isnull(l.estado,1)))),				-- Indica el estado del tercero para el CRM (bandera)		
 	campo_36 = ltrim(rtrim(n.nom1)),											-- nombre 1
@@ -83,8 +83,8 @@ select top 5
 	campo_40 = ltrim(rtrim(n.ape2)),											-- nombre 5
 	campo_41 = ltrim(rtrim(convert(varchar, c.id_emp))),						-- id empresa	
 	campo_42 = ltrim(rtrim(convert(varchar, id_cot_forma_pago))),				-- id forma de pago, se relaciona con la tabla cot_forma_pago
-	campo_43 = '',
-	campo_44 = '',
+	campo_43 = ltrim(rtrim(convert(varchar, id_cot_zona_sub))),					-- zona ( id de la subzona asociada )
+	campo_44 = ltrim(rtrim(convert(varchar, id_cot_cliente_perfil))),			-- perfil del cliente tabla cot_cliente_perfil
 	campo_45 = '',
 	campo_46 = '',
 	campo_47 = '',
@@ -102,7 +102,7 @@ select top 5
 	campo_59 = '',
 	campo_60 = ''
  FROM	cot_cliente c
-	join tipo_tributario t on t.id = c.id_tipo_tributario
+	left join tipo_tributario t on t.id = c.id_tipo_tributario
 	left join cot_cliente_contacto o on o.id = c.id_cot_cliente_contacto
 	left join cot_cliente_pais as ciudad on ciudad.id = c.id_cot_cliente_pais
 	left join cot_cliente_pais as departamento on Departamento.id = ciudad.id_cot_cliente_pais
@@ -1142,5 +1142,243 @@ begin
 		where tabla = 'veh_linea_modelo' and idvalor = @id
 end 
 go
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_item_colores')
+	DROP PROC CMGetcot_item_colores
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_item_color
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_item_colores @id_emp int 
+AS
+select top 5 
+	campo_1 = ltrim(rtrim(convert(varchar,id))),
+	campo_2 = ltrim(rtrim(convert(varchar,id_emp))),
+	campo_3 = ltrim(rtrim(convert(varchar,codigo_color))),
+	campo_4 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_5 = ltrim(rtrim(convert(varchar,idv))),
+	campo_6 = dbo.CMFormatoFecha(fecha_modif),
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	cot_item_color
+ WHERE id_emp = @id_emp
+GO
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_zonas')
+	DROP PROC CMGetcot_zonas
+GO
+
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_zona
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_zonas @id_emp int 
+AS
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id_emp))),
+	campo_2 = ltrim(rtrim(convert(varchar,id))),
+	campo_3 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_4 = dbo.CMFormatoFecha(fecha_modif),
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	cot_zona
+ where id_emp = @id_emp
+GO
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_zona_subs')
+	DROP PROC CMGetcot_zona_subs
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_zona_sub
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_zona_subs @id_emp int 
+AS
+select
+	campo_1 = ltrim(rtrim(convert(varchar,id_cot_zona))),
+	campo_2 = ltrim(rtrim(convert(varchar,s.id))),
+	campo_3 = ltrim(rtrim(convert(varchar,s.descripcion))),
+	campo_4 = dbo.CMFormatoFecha(s.fecha_modif),
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	cot_zona_sub s
+	join cot_zona z on z.id = s.id_cot_zona
+ where id_emp = @id_emp
+GO
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMSynccot_items')
+	DROP PROC CMSynccot_items
+GO
+----------------------------------------------------------------------------
+-- Procedimiento para marcar un item como sincronizado
+----------------------------------------------------------------------------
+
+create procedure CMSynccot_items
+	@id int
+as
+begin
+	if not exists(select id from cm_logcambios where tabla = 'cot_item' and idvalor = @id)
+		insert into cm_logcambios(tabla, idvalor, estado)
+		values('cot_item', @id, 99)
+	else
+		update cm_logcambios
+		set estado = 99
+		where tabla = 'cot_item' and idvalor = @id
+end 
+GO
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_item_lotes')
+	DROP PROC CMGetcot_item_lotes
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_item_lote
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_item_lotes @id_emp int 
+AS
+
+select top 5 
+	campo_1 = ltrim(rtrim(convert(varchar,o.id))),							-- identificadór único del lote (vehículo ó maquinaria)
+	campo_2 = ltrim(rtrim(convert(varchar,id_cot_item))),					-- id del modelo_año al que pertenece
+	campo_3 = ltrim(rtrim(convert(varchar,lote))),							-- Serial
+	campo_4 = ltrim(rtrim(convert(varchar,o.fecha_creacion))),
+	campo_5 = ltrim(rtrim(convert(varchar,o.fecha_vencimiento))),
+	campo_6 = ltrim(rtrim(convert(varchar,o.notas))),
+	campo_7 =	'',
+	campo_8 = ltrim(rtrim(convert(varchar,fecha_modif))),
+	campo_9 = ltrim(rtrim(convert(varchar,vin))),
+	campo_10 = ltrim(rtrim(convert(varchar,o.motor))),
+	campo_11 = ltrim(rtrim(convert(varchar,placa))),
+	campo_12 = ltrim(rtrim(convert(varchar,o.chasis))),
+	campo_13 = ltrim(rtrim(convert(varchar,o.km))),
+	campo_14 = ltrim(rtrim(convert(varchar,id_veh_color_int))),				-- id del color interno
+	campo_15 = ltrim(rtrim(convert(varchar,o.id_veh_color))),					-- id del color externo
+	campo_16 = ltrim(rtrim(convert(varchar,o.id_cot_cliente_contacto))),		-- id del contacto que tiene asociado el vh
+	campo_17 = ltrim(rtrim(convert(varchar,o.licencia_transito))),
+	campo_18 = ltrim(rtrim(convert(varchar,o.seguro_obligatorio))),
+	campo_19 = ltrim(rtrim(convert(varchar,id_cot_cliente_pais))),
+	campo_20 = ltrim(rtrim(convert(varchar,id_cot_cliente_aseguradora))),	-- id de la aseguradora
+	campo_21 = '',
+	campo_22 = '',
+	campo_23 = '',
+	campo_24 = '',
+	campo_25 = '',
+	campo_26 = '',
+	campo_27 = '',
+	campo_28 = '',
+	campo_29 = '',
+	campo_30 = '',
+	campo_31 = '',
+	campo_32 = '',
+	campo_33 = '',
+	campo_34 = '',
+	campo_35 = '',
+	campo_36 = '',
+	campo_37 = '',
+	campo_38 = '',
+	campo_39 = '',
+	campo_40 = '',
+	campo_41 = '',
+	campo_42 = '',
+	campo_43 = '',
+	campo_44 = '',
+	campo_45 = '',
+	campo_46 = '',
+	campo_47 = '',
+	campo_48 = '',
+	campo_49 = '',
+	campo_50 = '',
+	campo_51 = '',
+	campo_52 = '',
+	campo_53 = '',
+	campo_54 = '',
+	campo_55 = '',
+	campo_56 = '',
+	campo_57 = '',
+	campo_58 = '',
+	campo_59 = '',
+	campo_60 = ''
+ FROM cot_item_lote o
+	join cot_item i on i.id = o.id_cot_item
+	left join cm_logcambios l on l.tabla = 'cot_item_lote' and l.idvalor = o.id
+ WHERE i.id_emp = @id_emp 
+	and id_veh_ano is not null
+	and isnull(l.estado,0) in (0,2)
+order by i.id
+
+GO
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMSynccot_item_lote')
+	DROP PROC CMSynccot_item_lote
+GO
+
+create procedure CMSynccot_item_lote
+	@id int
+as
+begin
+	if not exists(select id from cm_logcambios where tabla = 'cot_item_lote' and idvalor = @id)
+		insert into cm_logcambios(tabla, idvalor, estado)
+		values('cot_item_lote', @id, 99)
+	else
+		update cm_logcambios
+		set estado = 99
+		where tabla = 'cot_item_lote' and idvalor = @id
+end 
+go
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGettal_motivo_ingresos)
+	DROP PROC CMGettal_motivo_ingresos'
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla tal_motivo_ingreso
+----------------------------------------------------------------------------
+CREATE PROC CMGettal_motivo_ingresos @id_emp int 
+
+AS
+
+select top 5 
+	campo_1 = ltrim(rtrim(convert(varchar,id_emp))),
+	campo_2 = ltrim(rtrim(convert(varchar,id))),
+	campo_3 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_4 = ltrim(rtrim(convert(varchar,anulado))),
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	tal_motivo_ingreso
+
+GO
 
 

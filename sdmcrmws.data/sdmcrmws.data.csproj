@@ -60,8 +60,10 @@
     <Compile Include="DBItem.cs" />
     <Compile Include="DBMaestro.cs" />
     <Compile Include="DBNegocio.cs" />
+    <Compile Include="DBOrden.cs" />
     <Compile Include="DBUsuario.cs" />
     <Compile Include="DBVehiculos.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

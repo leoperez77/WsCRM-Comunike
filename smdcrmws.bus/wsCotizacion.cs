@@ -81,8 +81,8 @@ namespace smdcrmws.dto
         [DataMember]
         public String Negocio { get; set; }
 
-        //[DataMember]
-        //List<wsDetalleCotizacion> Detalle = new List<wsDetalleCotizacion>();
+        [DataMember]
+        public List<wsDetalleCotizacion> Detalle = new List<wsDetalleCotizacion>();
 
         //@Final int,
         //@nada char (1), --no se usa
@@ -126,7 +126,7 @@ namespace smdcrmws.dto
         //@tal_def TINYINT = 0
     }
     
-    class wsDetalleCotizacion
+    public class wsDetalleCotizacion
     {
         [DataMember]
         public String Id { get; set; }

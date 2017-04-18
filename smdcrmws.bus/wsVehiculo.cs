@@ -9,8 +9,8 @@ namespace smdcrmws.dto
 {
     [DataContract]
     [Serializable]
-    public class wsItem:wsMaestroBase
+    public class wsVehiculo:wsMaestroBase
     {
-        
+
     }
 }

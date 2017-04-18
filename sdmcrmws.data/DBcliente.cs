@@ -299,5 +299,116 @@ namespace sdmcrmws.data
 
             return obj;
         }
+
+        public static wsControl PutCliente(Stream JSONdataStream)
+        {
+            wsControl obj = new wsControl();
+            obj.FechaHora = DateTime.Now.ToString();
+            obj.Origen = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+            try
+            {
+                // Read in our Stream into a string...
+                StreamReader reader = new StreamReader(JSONdataStream);
+                string JSONdata = reader.ReadToEnd();
+
+                JavaScriptSerializer jss = new JavaScriptSerializer();
+                wsCliente cliente = jss.Deserialize<wsCliente>(JSONdata);
+                if (cliente == null)
+                {
+                    throw new System.InvalidOperationException("Objeto JSON no pudo convertirse en objeto wsCliente");
+                }
+
+                DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("PutCotClientes4");
+                DBCommon.dbConn.AddInParameter(cmd, "@emp", DbType.Int32, int.Parse(cliente.Campo_41));
+                DBCommon.dbConn.AddInParameter(cmd, "@usu", DbType.Int32, Helper.Bcero(cliente.Campo_24));//
+                DBCommon.dbConn.AddInParameter(cmd, "@idcli", DbType.Int32, int.Parse(cliente.Campo_1));//
+                DBCommon.dbConn.AddInParameter(cmd, "@privado", DbType.Int32, 0);
+                DBCommon.dbConn.AddInParameter(cmd, "@zona", DbType.Int32, Helper.Bcero(cliente.Campo_43));
+                DBCommon.dbConn.AddInParameter(cmd, "@raz", DbType.String, cliente.Campo_8);//
+                DBCommon.dbConn.AddInParameter(cmd, "@tel1", DbType.String, cliente.Campo_9);//
+                DBCommon.dbConn.AddInParameter(cmd, "@tel2", DbType.String, cliente.Campo_10);//
+                DBCommon.dbConn.AddInParameter(cmd, "@dir", DbType.String, cliente.Campo_14);//
+                DBCommon.dbConn.AddInParameter(cmd, "@url", DbType.String, "");
+                DBCommon.dbConn.AddInParameter(cmd, "@est", DbType.Int16, 0);
+                DBCommon.dbConn.AddInParameter(cmd, "@vend", DbType.Int32, Helper.Bcero(cliente.Campo_23));//
+                DBCommon.dbConn.AddInParameter(cmd, "@act", DbType.Int32, 0);
+                DBCommon.dbConn.AddInParameter(cmd, "@ori", DbType.Int32, 0);
+                DBCommon.dbConn.AddInParameter(cmd, "@tipclie", DbType.Int32, Helper.Bcero(cliente.Campo_22));//                
+                DBCommon.dbConn.AddInParameter(cmd, "@tipperfil", DbType.Int32, Helper.Bcero(cliente.Campo_44));//            
+                DBCommon.dbConn.AddInParameter(cmd, "@nit", DbType.String, cliente.Campo_2);//
+                DBCommon.dbConn.AddInParameter(cmd, "@ven1", DbType.Int32, 0);
+                DBCommon.dbConn.AddInParameter(cmd, "@ven2", DbType.Int32, 0);
+                DBCommon.dbConn.AddInParameter(cmd, "@uti1", DbType.Int32, 0);
+                DBCommon.dbConn.AddInParameter(cmd, "@uti2", DbType.Int32, 0);
+                DBCommon.dbConn.AddInParameter(cmd, "@notas", DbType.String, cliente.Campo_28);//              
+                DBCommon.dbConn.AddInParameter(cmd, "@cupo", DbType.Int32, Helper.Bcero(cliente.Campo_33));//
+                DBCommon.dbConn.AddInParameter(cmd, "@IdTipoTributario", DbType.Int32, Helper.Bcero(cliente.Campo_6));//
+                DBCommon.dbConn.AddInParameter(cmd, "@digito", DbType.Int32, Helper.Bcero(cliente.Campo_4));//
+                DBCommon.dbConn.AddInParameter(cmd, "@idcontacto", DbType.Int32, 0);
+                DBCommon.dbConn.AddInParameter(cmd, "@codigo", DbType.String, cliente.Campo_3);//
+
+                //    @idContacto INT = 0,
+                //    @FormaPago INT = 0,
+                //    @id_precio INT = 0,
+                //    @id_cot_tipo INT = 0,
+                //    @id_cot_cotizacion_formatos INT = 0,
+                //    @id_con_cco INT = 0,
+                //    @permite_controlados SMALLINT = 0,
+                //    @id_cot_cliente_pais INT = 0,
+                //    @nom1 VARCHAR(30) = '',
+                //    @nom2 VARCHAR(30) = '',
+                //    @ape1 VARCHAR(30) = '',
+                //    @ape2 VARCHAR(30) = '',
+                //    @claveweb VARCHAR(20) = '',
+                //    @recibir_mail SMALLINT = 0,
+                //    @ImpedirDescuento SMALLINT = 0,
+                //    @bod INT = 0,
+                //    @fletes MONEY = 0,
+                //    @dias SMALLINT = 0,
+                //    @IdTipoTributario2 INT = 0,
+                //    @max_dcto DECIMAL(5, 2) = 0,
+                //    @nom3 VARCHAR(50) = '',
+                //    @bod_recep INT = 0,
+                //    @descu_escal SMALLINT = 0,
+                //    @diaMax TINYINT = 0,
+                //    @Razon VARCHAR(200) = '',
+                //    @control_unidades SMALLINT = 0,
+                //    @codigo VARCHAR(20) = '',
+                //    @NoIva SMALLINT = 0,
+                //    @NoSismed SMALLINT = 0,
+                //    @CupoTal MONEY = 0,
+                //    @CupoVeh MONEY = 0,
+                //    @ppal TINYINT = 0,
+                //    @def_taller TINYINT = 0,
+                //    @id_cot_cliente_barrio int=0, --RML: 2017/02/10 Barrio
+                //    @id_tes_metodo_pago int=0, --RML: 2017/03/08 Metodo Pago
+
+                //    @tipo_identificacion char (1) = '' -- LAP 20170330
+                //)
+
+                try
+                {
+                    DBCommon.dbConn.ExecuteNonQuery(cmd);
+                }
+                catch
+                {
+                    throw;
+                }
+
+                obj.Estado = "ok";
+            }
+            catch (Exception ex)
+            {
+                obj.Estado = "error";
+                obj.Error = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    obj.Error += Environment.NewLine + ex.InnerException.Message;
+                }
+            }
+
+            return obj;
+        }
     }
 }

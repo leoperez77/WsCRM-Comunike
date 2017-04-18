@@ -49,8 +49,11 @@
     <Compile Include="wsItem.cs" />
     <Compile Include="wsLineaModelo.cs" />
     <Compile Include="wsMaestro.cs" />
+    <Compile Include="wsMaestroBase.cs" />
     <Compile Include="wsNegocio.cs" />
     <Compile Include="wsOperario.cs" />
+    <Compile Include="wsOrdenTaller.cs" />
+    <Compile Include="wsVehiculo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

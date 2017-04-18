@@ -68,6 +68,71 @@ namespace smdcrmClient
                 obj.Bodega = "300";
                 obj.Negocio = "0";
 
+                var det = new smdcrmws.dto.wsDetalleCotizacion();
+                det.Cantidad = "1";
+                det.Conversion = "1";
+                det.Descuento = "0";
+                det.Id = "0";
+                det.IdCotizacion = "0";
+                det.IdItem = "123369";
+                det.Precio = "89000000";
+                det.PrecioCotizado = "89000000";
+                det.Iva = "25";
+                det.Notas = "Este es un vehículo";
+                det.Renglon = "0";
+                det.Subtotal = "0"; // Así lo manda la app
+                obj.Detalle.Add(det);
+                               
+
+                det = new smdcrmws.dto.wsDetalleCotizacion();
+                det.Cantidad = "1";
+                det.Conversion = "1";
+                det.Descuento = "0";
+                det.Id = "0";
+                det.IdCotizacion = "0";
+                det.IdItem = "19479";
+                det.Precio = "150000";
+                det.PrecioCotizado = "150000";
+                det.Iva = "16";
+                det.Notas = "Esta es una película en la misma cotización, línea adicional";
+                det.Renglon = "1";
+                det.Subtotal = "0"; // Así lo manda la app
+                obj.Detalle.Add(det);
+                
+                textBox1.Text = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            }
+
+            if (optOrden.Checked)
+            {               
+                var obj = new smdcrmws.dto.wsOrdenTaller();
+                obj.Id = "0";
+                obj.IdEmpresa = "320";
+                obj.Usuario = "2985";
+                obj.Bodega = "2985";
+                obj.Fecha = "2017-03-21";
+                obj.TipoDocumento = "4083";
+                obj.Cliente = "223395";
+                obj.Vendedor = "2985";
+                obj.Contacto = "145557";
+                obj.Subtotal = "0";
+                obj.Descuento = "0";
+                obj.Iva = "0";
+                obj.Total = "0";
+                obj.FechaEstimada = "20170427 15:30:00";
+                obj.Notas = "Notas de la orden de taller";
+                obj.NotasInternas = "Notas internas que no se imprimen";
+                obj.Kilometraje = "18500";
+                obj.IdLote = "110997";
+                obj.Rombo = "ROB001";
+                obj.TipoReferencia = "T001";
+                obj.NumeroReferencia = "1023";
+                obj.Aseguradora = "0";
+                obj.Deducible = "0";
+                obj.MinimoDeducible = "0";
+                obj.IdMotivo = "22";
+                obj.ValorHora = "85000";
+                obj.IdPlan = "0";
+                obj.IdCita = "0";
                 textBox1.Text = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             }
         }

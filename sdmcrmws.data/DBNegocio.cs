@@ -172,12 +172,65 @@ namespace sdmcrmws.data
                 DBCommon.dbConn.AddInParameter(cmd, "@tot_Iva2", DbType.Currency, 0);
                 DBCommon.dbConn.AddInParameter(cmd, "@hacer_rc", DbType.Int32, 0);
                                
-                DBCommon.dbConn.ExecuteNonQuery(cmd);
+                DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
+               
+                IdRetorno = int.Parse(DBCommon.dbConn.GetParameterValue(cmd, "@idRetorno").ToString());
+                
+                cmd = DBCommon.dbConn.GetStoredProcCommand("DelCotCotizacion_Pago");
+                DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, IdRetorno);
+                DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
+
+                int Linea = 0;
+
+                foreach (var detalle in Cotizacion.Detalle )
+                {
+                    cmd = DBCommon.dbConn.GetStoredProcCommand("PutCotCotizacionItems3");
+                    DBCommon.dbConn.AddInParameter(cmd, "@emp", DbType.Int32, int.Parse(Cotizacion.IdEmpresa));
+                    DBCommon.dbConn.AddInParameter(cmd, "@bod", DbType.Int32, int.Parse(Cotizacion.Bodega));
+                    DBCommon.dbConn.AddInParameter(cmd, "@usu", DbType.Int32, int.Parse(Cotizacion.Usuario));
+                    DBCommon.dbConn.AddInParameter(cmd, "@renglon", DbType.Int32, Linea);
+                    DBCommon.dbConn.AddInParameter(cmd, "@idcot", DbType.Int32, IdRetorno);
+                    DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, detalle.Id);
+                    DBCommon.dbConn.AddInParameter(cmd, "@iditem", DbType.Int32, detalle.IdItem);
+                    DBCommon.dbConn.AddInParameter(cmd, "@cant", DbType.Currency, detalle.Cantidad);
+                    DBCommon.dbConn.AddInParameter(cmd, "@preciolista", DbType.Currency, detalle.Precio);
+                    DBCommon.dbConn.AddInParameter(cmd, "@preciocotizado", DbType.Currency, detalle.PrecioCotizado);
+                    DBCommon.dbConn.AddInParameter(cmd, "@iva", DbType.Currency, detalle.Iva);
+                    DBCommon.dbConn.AddInParameter(cmd, "@notas", DbType.String, detalle.Notas);
+                    DBCommon.dbConn.AddInParameter(cmd, "@preciomasiva", DbType.Currency, detalle.Subtotal);
+                    DBCommon.dbConn.AddInParameter(cmd, "@porcentaje_descuento", DbType.Currency, detalle.Descuento);
+                    DBCommon.dbConn.AddInParameter(cmd, "@id_operario", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@id_cot_item_lote", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@porcentaje_descuento_grupo", DbType.Currency, -1);
+                    DBCommon.dbConn.AddInParameter(cmd, "@facturar_a", DbType.String, "");
+                    DBCommon.dbConn.AddInParameter(cmd, "@IdPed", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@tipotran", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@EsDevRemi", DbType.Int16, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@conv", DbType.Currency, detalle.Conversion);
+                    DBCommon.dbConn.AddInParameter(cmd, "@und", DbType.Int16, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@can_tot_dis", DbType.Currency, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@bod_dest", DbType.Int16, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@descu_escal", DbType.Currency, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@ignorar_stock", DbType.Int16, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@coscia", DbType.Int16, -1);
+                    DBCommon.dbConn.AddInParameter(cmd, "@id_promo", DbType.Int16, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@cen", DbType.Int16, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@tipo_operacion", DbType.String, "");
+                    DBCommon.dbConn.AddInParameter(cmd, "@iva2", DbType.Currency, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@id_iva2", DbType.Int16, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@ret_fte", DbType.Currency, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@id_ret_fte", DbType.Int16, 0);                    
+                    DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
+                    Linea++;
+                }
+
+                cmd = DBCommon.dbConn.GetStoredProcCommand("PutCotControlTotal");
+                DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, IdRetorno);
+                DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
+
                 Tr.Commit();
 
-                IdRetorno = int.Parse(DBCommon.dbConn.GetParameterValue(cmd, "@idRetorno").ToString());
                 obj.IdGenerado = IdRetorno.ToString();
-
                 obj.Estado = "ok";
             }
             catch (Exception ex)

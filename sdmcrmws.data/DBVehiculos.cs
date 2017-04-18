@@ -9,6 +9,35 @@ namespace sdmcrmws.data
 {
     public class DBVehiculos
     {
+        public static List<wsVehiculo> GetVehiculos(string IdEmpresa)
+        {
+            List<wsVehiculo> results = new List<wsVehiculo>();
+
+            DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMGetcot_item_lotes");
+            DBCommon.dbConn.AddInParameter(cmd, "@id_emp", DbType.Int16, int.Parse(IdEmpresa));
+
+            //((RefCountingDataReader)db.ExecuteReader(command)).InnerReader as SqlDataReader;
+            using (IDataReader dr = DBCommon.dbConn.ExecuteReader(cmd))
+            {
+                while (dr.Read())
+                {
+                    wsVehiculo obj = new wsVehiculo();
+                    int iCampo = 1;
+                    for (int i = 0; i < dr.FieldCount; i++)
+                    {
+                        obj["Campo_" + iCampo.ToString()] = !dr.IsDBNull(i) ? dr.GetString(i) : "";
+                        iCampo++;
+                    }
+
+                    results.Add(obj);
+
+                }
+                dr.Close();
+            }
+
+            return results;
+        }
+
         public static List<wsLineaModelo> GetModelosLinea(string IdEmpresa)
         {
             List<wsLineaModelo> results = new List<wsLineaModelo>();
@@ -49,6 +78,42 @@ namespace sdmcrmws.data
 
                 DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMSyncveh_linea_modelo");
                 DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, IdItem);
+
+                try
+                {
+                    DBCommon.dbConn.ExecuteNonQuery(cmd);
+                }
+                catch
+                {
+                    throw;
+                }
+
+                obj.Estado = "ok";
+            }
+            catch (Exception ex)
+            {
+                obj.Estado = "error";
+                obj.Error = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    obj.Error += Environment.NewLine + ex.InnerException.Message;
+                }
+            }
+
+            return obj;
+        }
+
+        public static wsControl MarcarVehiculoSincronizado(int IdVehiculo)
+        {
+            wsControl obj = new wsControl();
+            obj.FechaHora = DateTime.Now.ToString();
+            obj.Origen = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+            try
+            {
+
+                DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMSynccot_item_lote");
+                DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, IdVehiculo);
 
                 try
                 {

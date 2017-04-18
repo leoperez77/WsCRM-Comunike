@@ -30,6 +30,8 @@ namespace smdcrmws
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putClienteSync")]
         wsControl PutClienteSync(Stream JSONdataStream);
 
+       
+
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putClientesSync")]
         wsControl PutClientesSync(Stream JSONdataStream);
@@ -142,6 +144,14 @@ namespace smdcrmws
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubgrupos5Sync/{IdEmpresa}")]
         List<wsMaestro> GetSubgrupos5Sync(string IdEmpresa);
 
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getZonasSync/{IdEmpresa}")]
+        List<wsMaestro> GetZonasSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubzonasSync/{IdEmpresa}")]
+        List<wsMaestro> GetSubzonasSync(string IdEmpresa);
+
         //vehículos
 
         [OperationContract]
@@ -179,6 +189,30 @@ namespace smdcrmws
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putCotizacion")]
         wsControl PutCotizacion(Stream JSONdataStream);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putCliente")]
+        wsControl PutCliente(Stream JSONdataStream);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putCotCliente")]
+        wsControl PutCotCliente(Stream JSONdataStream);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getVehiculosSync/{IdEmpresa}")]
+        List<wsVehiculo> GetVehiculosSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "MarcarVehiculoSync/{IdVehiculo}")]
+        wsControl MarcarVehiculoSync(string IdVehiculo);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putOrdenTaller")]
+        wsControl PutOrdenTaller(Stream JSONdataStream);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getMotivosIngresoSync/{IdEmpresa}")]
+        List<wsMaestro> GetMotivosIngresoSync(string IdEmpresa);
 
         //[OperationContract]
         //[WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, UriTemplate = "putClientesSync")]
