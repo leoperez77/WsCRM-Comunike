@@ -45,6 +45,7 @@
     <Compile Include="wsCliente.cs" />
     <Compile Include="wsContacto.cs" />
     <Compile Include="wsControl.cs" />
+    <Compile Include="wsPedido.cs" />
     <Compile Include="wsCotizacion.cs" />
     <Compile Include="wsItem.cs" />
     <Compile Include="wsLineaModelo.cs" />

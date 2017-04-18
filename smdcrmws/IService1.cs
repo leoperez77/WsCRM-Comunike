@@ -214,6 +214,10 @@ namespace smdcrmws
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getMotivosIngresoSync/{IdEmpresa}")]
         List<wsMaestro> GetMotivosIngresoSync(string IdEmpresa);
 
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putPedido")]
+        wsControl PutPedido(Stream JSONdataStream);
+
         //[OperationContract]
         //[WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, UriTemplate = "putClientesSync")]
         //int PutClientesSync(Stream JSONdataStream);

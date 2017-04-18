@@ -316,5 +316,10 @@ namespace smdcrmws
         {
             return DBMaestro.GetMaestro(IdEmpresa, "CMGettal_motivo_ingresos");
         }
+
+        public wsControl PutPedido(Stream JSONdataStream)
+        {
+            return DBPedido.PutPedido(JSONdataStream);
+        }
     }
 }

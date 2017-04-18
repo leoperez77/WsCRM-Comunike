@@ -135,6 +135,67 @@ namespace smdcrmClient
                 obj.IdCita = "0";
                 textBox1.Text = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             }
+
+            if(optPedido.Checked)
+            {
+                var obj = new smdcrmws.dto.wsCotizacion();
+                obj.Id = "0";
+                obj.IdEmpresa = "320";
+                obj.Usuario = "2985";
+                obj.Fecha = "2017-04-29";
+                obj.TipoDocumento = "432";
+                obj.Cliente = "223395";
+                obj.Vendedor = "2985";
+                obj.FormaPago = "0";
+                obj.Contacto = "145557";
+                obj.Dias = "30";
+                obj.Subtotal = "89150000";
+                obj.Descuento = "0";
+                obj.Iva = "22274000";
+                obj.Total = "111424000";
+                obj.Estado = "0"; // envía la misma empresa. revisar
+                obj.Moneda = "0";
+                obj.Tasa = "1";
+                obj.FechaEstimada = "2017-05-10";
+                obj.Factibilidad = "50";
+                obj.NotasInternas = "Estas son las notas internas no visibles para el cliente";
+                obj.Notas = "Notas del pedido";
+                obj.Bodega = "300";
+                obj.Negocio = "0";
+
+                var det = new smdcrmws.dto.wsDetalleCotizacion();
+                det.Cantidad = "1";
+                det.Conversion = "1";
+                det.Descuento = "0";
+                det.Id = "0";
+                det.IdCotizacion = "0";
+                det.IdItem = "19510";
+                det.Precio = "60000";
+                det.PrecioCotizado = "60000";
+                det.Iva = "19";
+                det.Notas = "Item 1";
+                det.Renglon = "0";
+                det.Subtotal = "0"; // Así lo manda la app
+                obj.Detalle.Add(det);
+
+
+                det = new smdcrmws.dto.wsDetalleCotizacion();
+                det.Cantidad = "1";
+                det.Conversion = "1";
+                det.Descuento = "0";
+                det.Id = "0";
+                det.IdCotizacion = "0";
+                det.IdItem = "19512";
+                det.Precio = "60000";
+                det.PrecioCotizado = "60000";
+                det.Iva = "16";
+                det.Notas = "Item 2";
+                det.Renglon = "1";
+                det.Subtotal = "0"; // Así lo manda la app
+                obj.Detalle.Add(det);
+
+                textBox1.Text = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            }
         }
     }
 

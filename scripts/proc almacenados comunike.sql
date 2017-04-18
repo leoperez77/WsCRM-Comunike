@@ -1351,8 +1351,8 @@ end
 go
 
 
-IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGettal_motivo_ingresos)
-	DROP PROC CMGettal_motivo_ingresos'
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGettal_motivo_ingresos')
+	DROP PROC CMGettal_motivo_ingresos
 GO
 ----------------------------------------------------------------------------
 -- Procedimiento de lectura de registos por sincronizar tabla tal_motivo_ingreso
@@ -1361,7 +1361,7 @@ CREATE PROC CMGettal_motivo_ingresos @id_emp int
 
 AS
 
-select top 5 
+select 
 	campo_1 = ltrim(rtrim(convert(varchar,id_emp))),
 	campo_2 = ltrim(rtrim(convert(varchar,id))),
 	campo_3 = ltrim(rtrim(convert(varchar,descripcion))),
@@ -1378,7 +1378,8 @@ select top 5
 	campo_14 = '',
 	campo_15 = ''
  FROM	tal_motivo_ingreso
-
+ WHERE id_emp = @id_emp
 GO
 
 
+CMGettal_motivo_ingresos 320

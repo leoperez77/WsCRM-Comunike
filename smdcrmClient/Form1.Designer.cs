@@ -33,6 +33,7 @@
             this.optNegocio = new System.Windows.Forms.RadioButton();
             this.optCotizacion = new System.Windows.Forms.RadioButton();
             this.optOrden = new System.Windows.Forms.RadioButton();
+            this.optPedido = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // textBox1
@@ -86,11 +87,22 @@
             this.optOrden.Text = "Orden de taller";
             this.optOrden.UseVisualStyleBackColor = true;
             // 
+            // optPedido
+            // 
+            this.optPedido.AutoSize = true;
+            this.optPedido.Location = new System.Drawing.Point(284, 13);
+            this.optPedido.Name = "optPedido";
+            this.optPedido.Size = new System.Drawing.Size(58, 17);
+            this.optPedido.TabIndex = 5;
+            this.optPedido.Text = "Pedido";
+            this.optPedido.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(685, 272);
+            this.Controls.Add(this.optPedido);
             this.Controls.Add(this.optOrden);
             this.Controls.Add(this.optCotizacion);
             this.Controls.Add(this.optNegocio);
@@ -110,6 +122,7 @@
         private System.Windows.Forms.RadioButton optNegocio;
         private System.Windows.Forms.RadioButton optCotizacion;
         private System.Windows.Forms.RadioButton optOrden;
+        private System.Windows.Forms.RadioButton optPedido;
     }
 }
 
