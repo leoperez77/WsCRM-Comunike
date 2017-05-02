@@ -97,57 +97,57 @@ namespace smdcrmws
 
         public List<wsMaestro> GetTiposTributariosSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGettipo_tributarios");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGettipo_tributarios");
         }
 
         public List<wsMaestro> GetPaisesSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_cliente_paises");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_cliente_paises");
         }
 
         public List<wsMaestro> GetBarriosSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_cliente_barrios");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_cliente_barrios");
         }
 
         public List<wsMaestro> GetEstadosClienteSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_estados");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_estados");
         }
 
         public List<wsMaestro> GetGruposSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_grupos");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_grupos");
         }
 
         public List<wsMaestro> GetSubgruposSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_grupo_subs");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_grupo_subs");
         }
 
         public List<wsMaestro> GetBodegasSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_bodegas");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_bodegas");
         }
 
         public List<wsMaestro> GetTallasSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_item_tallas");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_item_tallas");
         }
 
         public List<wsMaestro> GetColoresSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_item_colores");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_item_colores");
         }
 
         public List<wsMaestro> GetCategoriasSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_item_categorias");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_item_categorias");
         }
 
         public List<wsMaestro> GetUnidadesSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_unidades");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_unidades");
         }
 
         public wsControl MarcarClienteSync(string IdCliente)
@@ -167,17 +167,17 @@ namespace smdcrmws
 
         public List<wsMaestro> GetBancosSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGettes_bancos");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGettes_bancos");
         }
 
         public List<wsMaestro> GetProfesionesSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_profesiones");            
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_profesiones");            
         }
 
         public List<wsMaestro> GetCargosSync(string IdEmpresa)
         {            
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_cliente_cargos");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_cliente_cargos");
         }
 
         public wsControl MarcarContactoSync(string IdContacto)
@@ -187,67 +187,67 @@ namespace smdcrmws
 
         public List<wsMaestro> GetActividadesSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_cliente_actividades");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_cliente_actividades");
         }
 
         public List<wsMaestro> GetFormasPagoSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_formas_pago");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_formas_pago");
         }
 
         public List<wsMaestro> GetTiposClienteSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_cliente_tipos");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_cliente_tipos");
         }
 
         public List<wsMaestro> GetPerfilesClienteSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_cliente_perfiles");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_cliente_perfiles");
         }
 
         public List<wsMaestro> GetSubgrupos3Sync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_grupo_subgrupos3");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_grupo_subgrupos3");
         }
 
         public List<wsMaestro> GetSubgrupos4Sync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_grupo_subgrupos4");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_grupo_subgrupos4");
         }
 
         public List<wsMaestro> GetSubgrupos5Sync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_grupo_subgrupos5");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_grupo_subgrupos5");
         }
 
         public List<wsMaestro> GetZonasSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_zonas");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_zonas");
         }
 
         public List<wsMaestro> GetSubzonasSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetcot_zona_subs");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_zona_subs");
         }
 
         public List<wsMaestro> GetMarcasVehSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetveh_marcas");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetveh_marcas");
         }
 
         public List<wsMaestro> GetLineasVehSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetveh_lineas");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetveh_lineas");
         }
 
         public List<wsMaestro> GetClasesVehSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetveh_clases");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetveh_clases");
         }
 
         public List<wsMaestro> GetTiposServicioVehSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGetveh_servicios");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetveh_servicios");
         }
 
         public List<wsLineaModelo> GetModelosLineaVehSync(string IdEmpresa)
@@ -314,7 +314,7 @@ namespace smdcrmws
 
         public List<wsMaestro> GetMotivosIngresoSync(string IdEmpresa)
         {
-            return DBMaestro.GetMaestro(IdEmpresa, "CMGettal_motivo_ingresos");
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGettal_motivo_ingresos");
         }
 
         public wsControl PutPedido(Stream JSONdataStream)
@@ -322,9 +322,55 @@ namespace smdcrmws
             return DBPedido.PutPedido(JSONdataStream);
         }
 
-        public List<wsStock> GetStock(string IdItem, string IdBodega)
+        public wsStock GetStock(string IdItem, string IdBodega)
         {
-            throw new NotImplementedException();
+            return DBItem.GetStock(int.Parse(IdItem), int.Parse(IdBodega));
+        }
+
+        public List<wsMaestro> GetPlanesSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGettal_planes");
+        }
+
+        public List<wsMaestro> GetCampsSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGettal_campañas");
+        }
+
+        public wsControl MarcarCampSync(string IdCamp)
+        {
+            return DBMaestro.MarcarMaestroSincronizado(int.Parse(IdCamp), "CMSynctal_camp_enc");
+        }
+
+        public List<wsMaestro> GetEstadisticaCliente(string IdCliente, string FechaDesde, string FechaHasta)
+        {
+            try
+            { 
+                return DBcliente.GetEstadistica(int.Parse(IdCliente),DateTime.Parse(FechaDesde), DateTime.Parse(FechaHasta));
+            }
+            catch (Exception ex)
+            {
+                //  Return any exception messages back to the Response header
+                OutgoingWebResponseContext response = WebOperationContext.Current.OutgoingResponse;
+                response.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                response.StatusDescription = ex.Message.Replace("\r\n", "");
+                return null;
+            }
+        }
+
+        public wsControl PutCita(Stream JSONdataStream)
+        {
+            return DBCita.PutCita(JSONdataStream);
+        }
+
+        public List<wsMaestro> GetCitasDia(string IdEmpresa, string IdBodega, string Fecha)
+        {
+            return DBCita.GetCitasDia(int.Parse(IdEmpresa), int.Parse(IdBodega), DateTime.Parse(Fecha));
+        }
+
+        public List<wsMaestro> GetListasSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_item_listas");
         }
     }
 }

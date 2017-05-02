@@ -34,6 +34,7 @@
             this.optCotizacion = new System.Windows.Forms.RadioButton();
             this.optOrden = new System.Windows.Forms.RadioButton();
             this.optPedido = new System.Windows.Forms.RadioButton();
+            this.optCita = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // textBox1
@@ -61,7 +62,7 @@
             this.optNegocio.Checked = true;
             this.optNegocio.Location = new System.Drawing.Point(23, 12);
             this.optNegocio.Name = "optNegocio";
-            this.optNegocio.Size = new System.Drawing.Size(65, 17);
+            this.optNegocio.Size = new System.Drawing.Size(68, 17);
             this.optNegocio.TabIndex = 2;
             this.optNegocio.TabStop = true;
             this.optNegocio.Text = "Negocio";
@@ -72,7 +73,7 @@
             this.optCotizacion.AutoSize = true;
             this.optCotizacion.Location = new System.Drawing.Point(103, 12);
             this.optCotizacion.Name = "optCotizacion";
-            this.optCotizacion.Size = new System.Drawing.Size(74, 17);
+            this.optCotizacion.Size = new System.Drawing.Size(79, 17);
             this.optCotizacion.TabIndex = 3;
             this.optCotizacion.Text = "Cotización";
             this.optCotizacion.UseVisualStyleBackColor = true;
@@ -82,7 +83,7 @@
             this.optOrden.AutoSize = true;
             this.optOrden.Location = new System.Drawing.Point(184, 13);
             this.optOrden.Name = "optOrden";
-            this.optOrden.Size = new System.Drawing.Size(94, 17);
+            this.optOrden.Size = new System.Drawing.Size(103, 17);
             this.optOrden.TabIndex = 4;
             this.optOrden.Text = "Orden de taller";
             this.optOrden.UseVisualStyleBackColor = true;
@@ -90,26 +91,39 @@
             // optPedido
             // 
             this.optPedido.AutoSize = true;
-            this.optPedido.Location = new System.Drawing.Point(284, 13);
+            this.optPedido.Location = new System.Drawing.Point(293, 12);
             this.optPedido.Name = "optPedido";
-            this.optPedido.Size = new System.Drawing.Size(58, 17);
+            this.optPedido.Size = new System.Drawing.Size(61, 17);
             this.optPedido.TabIndex = 5;
             this.optPedido.Text = "Pedido";
             this.optPedido.UseVisualStyleBackColor = true;
+            // 
+            // optCita
+            // 
+            this.optCita.AutoSize = true;
+            this.optCita.Location = new System.Drawing.Point(361, 13);
+            this.optCita.Name = "optCita";
+            this.optCita.Size = new System.Drawing.Size(45, 17);
+            this.optCita.TabIndex = 6;
+            this.optCita.TabStop = true;
+            this.optCita.Text = "Cita";
+            this.optCita.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(685, 272);
+            this.Controls.Add(this.optCita);
             this.Controls.Add(this.optPedido);
             this.Controls.Add(this.optOrden);
             this.Controls.Add(this.optCotizacion);
             this.Controls.Add(this.optNegocio);
             this.Controls.Add(this.cmdJson);
             this.Controls.Add(this.textBox1);
+            this.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Interfaz generación JSON de prueba";
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -123,6 +137,7 @@
         private System.Windows.Forms.RadioButton optCotizacion;
         private System.Windows.Forms.RadioButton optOrden;
         private System.Windows.Forms.RadioButton optPedido;
+        private System.Windows.Forms.RadioButton optCita;
     }
 }
 

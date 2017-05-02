@@ -211,7 +211,7 @@ select top 5
 	campo_37 = ltrim(rtrim(convert(varchar,precio_und4))),
 	campo_38 = ltrim(rtrim(convert(varchar,precio_und2))),
 	campo_39 = ltrim(rtrim(convert(varchar,id_veh_ano))),					-- Indica el modelo al que pertenece el item cuando es vehículo
-	campo_40 = '',
+	campo_40 = ltrim(rtrim(convert(varchar,calificacion_abc))),				-- si es 'O' es una operación de taller
 	campo_41 = '',
 	campo_42 = '',
 	campo_43 = '',
@@ -1276,8 +1276,8 @@ select top 5
 	campo_12 = ltrim(rtrim(convert(varchar,o.chasis))),
 	campo_13 = ltrim(rtrim(convert(varchar,o.km))),
 	campo_14 = ltrim(rtrim(convert(varchar,id_veh_color_int))),				-- id del color interno
-	campo_15 = ltrim(rtrim(convert(varchar,o.id_veh_color))),					-- id del color externo
-	campo_16 = ltrim(rtrim(convert(varchar,o.id_cot_cliente_contacto))),		-- id del contacto que tiene asociado el vh
+	campo_15 = ltrim(rtrim(convert(varchar,o.id_veh_color))),				-- id del color externo
+	campo_16 = ltrim(rtrim(convert(varchar,o.id_cot_cliente_contacto))),	-- id del contacto que tiene asociado el vh
 	campo_17 = ltrim(rtrim(convert(varchar,o.licencia_transito))),
 	campo_18 = ltrim(rtrim(convert(varchar,o.seguro_obligatorio))),
 	campo_19 = ltrim(rtrim(convert(varchar,id_cot_cliente_pais))),
@@ -1381,5 +1381,261 @@ select
  WHERE id_emp = @id_emp
 GO
 
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetstock')
+	DROP PROC CMGetstock
+GO
 
-CMGettal_motivo_ingresos 320
+create procedure dbo.CMGetstock @IdItem int, @IdBodega int 
+as
+	declare @manejalotes int 
+	declare @esvehiculos int = 0
+	
+	select @manejalotes = isnull(maneja_lotes,0),
+		@esvehiculos = case when id_veh_ano is not null then 1 else 0 end
+	from cot_item 
+	where id = @IdItem
+
+	exec GetCotItemStockSimple4	@IdBodega, @IdItem, @manejalotes, 0, 0, 1, 0, 0, 0, 0, -1, @esvehiculos, 0
+		
+go
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGettal_planes')
+	DROP PROC CMGettal_planes
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla tal_planes
+----------------------------------------------------------------------------
+CREATE PROC CMGettal_planes @id_emp int 
+
+AS
+
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id_emp))),
+	campo_2 = ltrim(rtrim(convert(varchar,id))),
+	campo_3 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_4 = ltrim(rtrim(convert(varchar,fecha_modif))),
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''	
+ FROM	tal_planes
+WHERE id_emp = @id_emp
+GO
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGettal_campañas')
+	DROP PROC CMGettal_campañas
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla tal_camp_enc
+----------------------------------------------------------------------------
+CREATE PROC CMGettal_campañas @id_emp int 
+AS
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,o.id))),
+	campo_2 = ltrim(rtrim(convert(varchar,id_emp))),
+	campo_3 = ltrim(rtrim(convert(varchar,titulo))),						-- nombre de la campaña
+	campo_4 = ltrim(rtrim(convert(varchar,fecha_ini))),						-- inicio vigencia
+	campo_5 = ltrim(rtrim(convert(varchar,fecha_fin))),						-- fin vigencia
+	campo_6 = ltrim(rtrim(convert(varchar,vin_ini))),
+	campo_7 = ltrim(rtrim(convert(varchar,vin_fin))),
+	campo_8 = ltrim(rtrim(convert(varchar,motor_ini))),
+	campo_9 = ltrim(rtrim(convert(varchar,motor_fin))),
+	campo_10 = ltrim(rtrim(convert(varchar,fecha_modif))),					-- ultimo cambio
+	campo_11 = ltrim(rtrim(convert(varchar,anulada))),						-- inidica di está anulada
+	campo_12 = ltrim(rtrim(convert(varchar,id_veh_linea))),					-- línea a la que aplica Ej Audi A4 , blanco para todos
+	campo_13 = ltrim(rtrim(convert(varchar,id_veh_linea_modelo))),			-- linea modelo a la que aaplica ej A4 1.8 TP , blanco para todos
+	campo_14 = '',
+	campo_15 = ''	
+ FROM	tal_camp_enc o
+		left join cm_logcambios l on l.tabla = 'tal_camp_enc' and l.idvalor = o.id
+ WHERE o.id_emp = @id_emp 
+	and fecha_fin >= cast(getdate() as date)	
+	and isnull(l.estado,0) in (0,2) 
+GO
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMSynctal_camp_enc')
+	DROP PROC CMSynctal_camp_enc
+GO
+
+create procedure CMSynctal_camp_enc
+	@id int
+as
+begin
+	if not exists(select id from cm_logcambios where tabla = 'tal_camp_enc' and idvalor = @id)
+		insert into cm_logcambios(tabla, idvalor, estado)
+		values('tal_camp_enc', @id, 99)
+	else
+		update cm_logcambios
+		set estado = 99
+		where tabla = 'tal_camp_enc' and idvalor = @id
+end 
+go
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGet_estadistica_cliente')
+	DROP PROC CMGet_estadistica_cliente
+GO
+
+CREATE procedure [dbo].[CMGet_estadistica_cliente]
+(
+	@id_cliente int,
+	@fecinf DATETIME,
+	@fecsup DATETIME
+)
+As
+	IF @fecsup <> ''
+		SET @fecsup=dbo.FormatoFechaSinHoraPlana(@fecsup) + ' 23:59:59'
+	
+	select	
+			tipo=t.descripcion,
+			numero = ltrim(rtrim(convert(varchar,c.numero_cotizacion))),
+			ltrim(rtrim(convert(varchar,c.id))),
+			fecha= dbo.CMFormatoFecha(isnull(c.fecha_cartera,c.fecha)),
+			ltrim(rtrim(convert(varchar,c.total_iva))),
+			ltrim(rtrim(convert(varchar,c.total_total))),
+			valor_aplicado = ltrim(rtrim(convert(varchar,isnull(s.valor_aplicado,0)))),
+			saldo = ltrim(rtrim(convert(varchar,c.total_total-IsNull(s.valor_aplicado,0)))),		
+			vencimiento=dbo.CMFormatoFecha(c.fecha_estimada),
+			dias_vencido=ltrim(rtrim(convert(varchar,datediff(d,c.fecha_estimada,getdate())))),
+			forma_pago=f.descripcion,
+			bodega=b.descripcion,			
+			ltrim(rtrim(convert(varchar,t.sw))),							-- indica la naturaleza del documento. 1 factura (ver módulo en advance)
+			c.notas		
+	from cot_cotizacion c 
+		join cot_cliente cli2 on cli2.id=c.id_cot_cliente
+		left join cot_forma_pago f on f.id=c.id_cot_forma_pago
+		left join v_cot_cotizacion_cuotas_cuantas cu on cu.id_cot_cotizacion=c.id
+		Join cot_bodega b on b.id=c.id_cot_bodega
+		Join usuario u on u.id=c.id_usuario_vende
+		Join cot_tipo t on t.id=c.id_cot_tipo
+		Join v_cot_factura_saldo s on s.id_cot_cotizacion=c.id	
+	where sw is not null 
+		and c.id_cot_cliente = @id_cliente 
+		and c.fecha between @fecinf and @fecsup
+	union all
+	select	
+			tipo=t.descripcion,
+			numero=ltrim(rtrim(convert(varchar,n.numero))),
+			ltrim(rtrim(convert(varchar,n.id))),
+			fecha=dbo.CMFormatoFecha(n.fecha),
+			ltrim(rtrim(convert(varchar,n.total_iva))),
+			ltrim(rtrim(convert(varchar,n.total_total))),
+			valor_aplicado = ltrim(rtrim(convert(varchar,isnull(s.valor_aplicado,0)))),
+			saldo= ltrim(rtrim(convert(varchar,n.total_total-IsNull(s.valor_aplicado,0)))),			
+			vencimiento=null,
+			dias_vencido=null,
+			forma_pago=f.descripcion,
+			bodega=b.descripcion,		
+			ltrim(rtrim(convert(varchar,t.sw))),				
+			n.notas					
+	from cot_notas_deb_cre n 
+		join cot_cliente cli2 on cli2.id=n.id_cot_cliente
+		left join cot_forma_pago f on f.id=n.id_cot_forma_pago
+		Join cot_bodega b on b.id=n.id_cot_bodega
+		Join usuario u on u.id=n.id_usuario_vende
+		Join cot_tipo t on t.id=n.id_cot_tipo
+		left Join v_tes_nota_saldo s on s.id_cot_notas_deb_cre=n.id
+	where n.id_cot_cliente = @id_cliente and n.fecha between @fecinf and @fecsup
+	order by fecha
+
+go
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGet_tal_citas_fecha')
+	DROP PROC CMGet_tal_citas_fecha
+GO
+
+
+CREATE PROCEDURE CMGet_tal_citas_fecha
+(
+@emp int,
+@bod INT,
+@fecha DATETIME
+)
+AS
+	DECLARE @ocu15 TINYINT=dbo.ReglaDeNegocio(@emp,174,'minuto15',0)
+	DECLARE @ocu30 TINYINT=dbo.ReglaDeNegocio(@emp,174,'minuto30',0)
+	DECLARE @ocu45 TINYINT=dbo.ReglaDeNegocio(@emp,174,'minuto45',0)
+
+	DECLARE @hora_ini TINYINT=dbo.ReglaDeNegocio(@emp,174,'hora_ini'+CAST(@bod AS VARCHAR),8)
+	DECLARE @min_ini TINYINT=dbo.ReglaDeNegocio(@emp,174,'min_ini'+CAST(@bod AS VARCHAR),0)
+
+	DECLARE @hora_fin TINYINT=dbo.ReglaDeNegocio(@emp,174,'hora_fin'+CAST(@bod AS VARCHAR),16)
+	DECLARE @min_fin TINYINT=dbo.ReglaDeNegocio(@emp,174,'min_fin'+CAST(@bod AS VARCHAR),0)
+
+	--0) citas del dia
+	SELECT	id = ltrim(rtrim(convert(varchar,c.id))),
+			H=ltrim(rtrim(convert(varchar,t.hora))),
+			M= ltrim(rtrim(convert(varchar,CASE WHEN t.minutos=0 THEN NULL ELSE t.minutos end))),
+			l.placa,
+			i.descripcion,
+			c.responsable,
+			c.telefono,
+			c.notas,
+			ltrim(rtrim(convert(varchar,c.id_cot_cotizacion))),				-- número de la OT asociada a la cita
+			ltrim(rtrim(convert(varchar,c.id_tal_planes))),					-- plan de mtto programado, puede ir en blanco
+			ltrim(rtrim(convert(varchar,c.id_tal_camp_enc)))				-- campaña asociada a la cita, no puede ser null
+	FROM tal_citas_horas t
+	LEFT JOIN tal_citas c ON c.id_cot_bodega=@bod
+							 AND year(c.fecha_cita)=YEAR(@fecha)
+							 AND MONTH(c.fecha_cita)=MONTH(@fecha)
+							 AND DAY(c.fecha_cita)=DAY(@fecha)
+							 AND DATEPART(HOUR,c.fecha_cita)=t.hora
+							 AND DATEPART(MINUTE,c.fecha_cita)=t.minutos
+	LEFT JOIN cot_item_lote l ON l.id=c.id_cot_item_lote
+	LEFT JOIN v_cot_item_descripcion i ON i.id=l.id_cot_item
+	WHERE t.hora>=@hora_ini AND (t.hora<>@hora_ini OR t.minutos>=@min_ini)
+	      AND t.hora<=@hora_fin AND (t.hora<>@hora_fin OR t.minutos<=@min_fin)
+		  AND (@ocu15=0 OR t.minutos<>15)
+		  AND (@ocu30=0 OR t.minutos<>30)
+		  AND (@ocu45=0 OR t.minutos<>45)
+	ORDER BY t.hora,t.minutos
+
+	--1) ver dias con citas
+	--SELECT DISTINCT fecha=CAST(dbo.FormatoFechaSinHoraPlana(c.fecha_cita) AS DATE)
+	--FROM tal_citas c
+	--WHERE c.id_cot_bodega=@Bod
+	--	  AND YEAR(c.fecha_cita)=YEAR(@fecha)
+	--	  AND MONTH(c.fecha_cita)=MONTH(@fecha)
+
+go
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_item_listas')
+	DROP PROC CMGetcot_item_listas
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_item_listas
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_item_listas @id_emp int 
+
+AS
+
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id))),
+	campo_2 = ltrim(rtrim(convert(varchar,id_emp))),
+	campo_3 = ltrim(rtrim(convert(varchar,precio_nro))),
+	campo_4 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_5 = ltrim(rtrim(convert(varchar,idv))),
+	campo_6 = ltrim(rtrim(convert(varchar,fecha_modif))),
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	cot_item_listas
+ WHERE id_emp = @id_emp
+GO
+
+

@@ -130,5 +130,52 @@ namespace sdmcrmws.data
 
             return obj;
         }
+
+        public static wsStock GetStock(int IdItem, int IdBodega)
+        {
+            var obj = new wsStock();
+
+            DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMGetstock");
+            DBCommon.dbConn.AddInParameter(cmd, "@idItem", DbType.Int32, IdItem);
+            DBCommon.dbConn.AddInParameter(cmd, "@IdBodega", DbType.Int32, IdBodega);
+
+            try
+            {
+                DataSet ds = DBCommon.dbConn.ExecuteDataSet(cmd);
+                DataTable dtr = ds.Tables[0];
+                DataTable dtd = ds.Tables[1];
+
+                obj.IdItem = IdItem.ToString();
+
+                if (dtr.Rows.Count > 0)
+                {
+                    DataRow dr = dtr.Rows[0];
+                    obj.Pendiente = dr["pendiente"].ToString();
+                    obj.Stock = dr["stock"].ToString();
+                    obj.Und = dr["und"].ToString();
+                    obj.CanUnd = dr["und_cant"].ToString();
+                }
+
+                List<wsDetalleStock> ldet = new List<wsDetalleStock>();
+
+                foreach (DataRow drd in dtd.Rows)
+                {
+                    var det = new wsDetalleStock();
+                    det.IdLote = drd["id_cot_item_lote"].ToString();
+                    det.Lote = drd["lote"].ToString();
+                    det.Pendiente = drd["pendiente"].ToString();
+                    det.Stock = drd["stock"].ToString();
+                    det.Vencimiento = DateTime.Parse(drd["fecha_vencimiento"].ToString()).ToString("yyyy-MM-dd");
+                    ldet.Add(det);
+                }
+                obj.Detalle = ldet;
+            }
+            catch
+            {
+                throw;
+            }
+
+            return obj;
+        }
     }
 }

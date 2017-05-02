@@ -133,6 +133,42 @@ namespace smdcrmClient
                 obj.ValorHora = "85000";
                 obj.IdPlan = "0";
                 obj.IdCita = "0";
+                                
+                var det = new smdcrmws.dto.wsOperacionOrden();
+                det.Id = "0";
+                det.IdCotizacion = "0";
+                det.IdItem = "123371";
+                det.Cantidad = "1";
+                det.Tiempo = "1";
+                det.ValorHora = "85000";
+                det.ValorOperacion = "0";
+                det.Iva = "19";
+                det.Notas = "Revisar ruido en el lado derecho";
+                det.PorcentajeDescuento = "0";
+                det.Operario = "3580";
+                det.Facturar = "C";
+                det.TipoOperacion = "L";
+
+                obj.Detalle.Add(det);
+
+
+                det = new smdcrmws.dto.wsOperacionOrden();
+                det.Id = "0";
+                det.IdCotizacion = "0";
+                det.IdItem = "123371";
+                det.Cantidad = "1";
+                det.Tiempo = "1";
+                det.ValorHora = "85000";
+                det.ValorOperacion = "0";
+                det.Iva = "19";
+                det.Notas = "Revisar ruido en el lado izquierdo";
+                det.PorcentajeDescuento = "0";
+                det.Operario = "3580";
+                det.Facturar = "C";
+                det.TipoOperacion = "L";
+
+                obj.Detalle.Add(det);
+
                 textBox1.Text = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             }
 
@@ -194,6 +230,22 @@ namespace smdcrmClient
                 det.Subtotal = "0"; // Así lo manda la app
                 obj.Detalle.Add(det);
 
+                textBox1.Text = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            }
+
+            if (optCita.Checked)
+            {
+                var obj = new wsCita();
+                obj.Id = "0";
+                obj.IdEmpresa = "320";
+                obj.Hora = "2017-05-02 11:15:00";
+                obj.Bodega = "958";
+                obj.IdCamp = "0";
+                obj.IdPlan = "0";
+                obj.Responsable = "Nombre del responsable";
+                obj.Telefono = "3017217928";
+                obj.Notas = "Notas de la cita";
+                obj.IdVehiculo = "111006";
                 textBox1.Text = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             }
         }

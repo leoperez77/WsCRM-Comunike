@@ -347,45 +347,7 @@ namespace sdmcrmws.data
                 DBCommon.dbConn.AddInParameter(cmd, "@digito", DbType.Int32, Helper.Bcero(cliente.Campo_4));//
                 DBCommon.dbConn.AddInParameter(cmd, "@idcontacto", DbType.Int32, 0);
                 DBCommon.dbConn.AddInParameter(cmd, "@codigo", DbType.String, cliente.Campo_3);//
-
-                //    @idContacto INT = 0,
-                //    @FormaPago INT = 0,
-                //    @id_precio INT = 0,
-                //    @id_cot_tipo INT = 0,
-                //    @id_cot_cotizacion_formatos INT = 0,
-                //    @id_con_cco INT = 0,
-                //    @permite_controlados SMALLINT = 0,
-                //    @id_cot_cliente_pais INT = 0,
-                //    @nom1 VARCHAR(30) = '',
-                //    @nom2 VARCHAR(30) = '',
-                //    @ape1 VARCHAR(30) = '',
-                //    @ape2 VARCHAR(30) = '',
-                //    @claveweb VARCHAR(20) = '',
-                //    @recibir_mail SMALLINT = 0,
-                //    @ImpedirDescuento SMALLINT = 0,
-                //    @bod INT = 0,
-                //    @fletes MONEY = 0,
-                //    @dias SMALLINT = 0,
-                //    @IdTipoTributario2 INT = 0,
-                //    @max_dcto DECIMAL(5, 2) = 0,
-                //    @nom3 VARCHAR(50) = '',
-                //    @bod_recep INT = 0,
-                //    @descu_escal SMALLINT = 0,
-                //    @diaMax TINYINT = 0,
-                //    @Razon VARCHAR(200) = '',
-                //    @control_unidades SMALLINT = 0,
-                //    @codigo VARCHAR(20) = '',
-                //    @NoIva SMALLINT = 0,
-                //    @NoSismed SMALLINT = 0,
-                //    @CupoTal MONEY = 0,
-                //    @CupoVeh MONEY = 0,
-                //    @ppal TINYINT = 0,
-                //    @def_taller TINYINT = 0,
-                //    @id_cot_cliente_barrio int=0, --RML: 2017/02/10 Barrio
-                //    @id_tes_metodo_pago int=0, --RML: 2017/03/08 Metodo Pago
-
-                //    @tipo_identificacion char (1) = '' -- LAP 20170330
-                //)
+              
 
                 try
                 {
@@ -409,6 +371,36 @@ namespace sdmcrmws.data
             }
 
             return obj;
+        }
+
+        public static List<wsMaestro> GetEstadistica(int IdCliente, DateTime FechaDesde, DateTime FechaHasta)
+        {      
+            List<wsMaestro> results = new List<wsMaestro>();
+            DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMGet_estadistica_cliente");
+            DBCommon.dbConn.AddInParameter(cmd, "@id_cliente", DbType.Int32, IdCliente);
+            DBCommon.dbConn.AddInParameter(cmd, "@fecinf", DbType.Date, FechaDesde);
+            DBCommon.dbConn.AddInParameter(cmd, "@fecsup", DbType.Date, FechaHasta);
+
+            //((RefCountingDataReader)db.ExecuteReader(command)).InnerReader as SqlDataReader;
+            using (IDataReader dr = DBCommon.dbConn.ExecuteReader(cmd))
+            {
+                while (dr.Read())
+                {
+                    wsMaestro obj = new wsMaestro();
+                    int iCampo = 1;
+                    for (int i = 0; i < dr.FieldCount; i++)
+                    {
+                        obj["Campo_" + iCampo.ToString()] = !dr.IsDBNull(i) ? dr.GetString(i) : "";
+                        iCampo++;
+                    }
+
+                    results.Add(obj);
+
+                }
+                dr.Close();
+            }
+
+            return results;
         }
     }
 }

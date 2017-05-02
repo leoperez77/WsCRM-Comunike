@@ -96,7 +96,55 @@ namespace smdcrmws.dto
 
         [DataMember]
         public String IdCita { get; set; }
-                
+
+        [DataMember]
+        public List<wsOperacionOrden> Detalle = new List<wsOperacionOrden>();
+    }
+        
+    public class wsOperacionOrden
+    {
+        [DataMember]
+        public String Id { get; set; }
+
+        [DataMember]
+        public String IdCotizacion { get; set; }
+
+        [DataMember]
+        public String IdItem { get; set; }
+
+        [DataMember]
+        public String Cantidad { get; set; }
+
+        [DataMember]
+        public String Tiempo { get; set; }
+
+        [DataMember]
+        public String ValorHora { get; set; }
+
+        [DataMember]
+        public String ValorOperacion { get; set; }
+        
+        [DataMember]
+        public String Renglon { get; set; }
+
+        [DataMember]
+        public String Iva { get; set; }
+
+        [DataMember]
+        public String Notas { get; set; }
+        
+        [DataMember]
+        public String PorcentajeDescuento { get; set; }
+        
+        [DataMember]
+        public String Operario { get; set; }
+
+        [DataMember]
+        public String Facturar { get; set; }
+
+        [DataMember]
+        public String TipoOperacion { get; set; }               
+
     }
 }
 

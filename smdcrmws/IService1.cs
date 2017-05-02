@@ -220,13 +220,35 @@ namespace smdcrmws
 
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getStock/{IdItem}/{IdBodega}")]
-        List<wsStock> GetStock(string IdItem, string IdBodega);
+        wsStock GetStock(string IdItem, string IdBodega);
 
-        //[OperationContract]
-        //[WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, UriTemplate = "putClientesSync")]
-        //int PutClientesSync(Stream JSONdataStream);
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetPlanesSync/{IdEmpresa}")]
+        List<wsMaestro> GetPlanesSync(string IdEmpresa);
 
-        //getOrdersForCustomer/{customerID}
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetCampsSync/{IdEmpresa}")]
+        List<wsMaestro> GetCampsSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "MarcarCampSync/{IdCamp}")]
+        wsControl MarcarCampSync(string IdCamp);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetEstadisticaCliente/{IdCliente}/{FechaDesde}/{FechaHasta}")]
+        List<wsMaestro> GetEstadisticaCliente(string IdCliente, string FechaDesde, string FechaHasta);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putCita")]
+        wsControl PutCita(Stream JSONdataStream);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetCitasDia/{IdEmpresa}/{IdBodega}/{Fecha}")]
+        List<wsMaestro> GetCitasDia(string IdEmpresa, string IdBodega, string Fecha);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetListasSync/{IdEmpresa}")]
+        List<wsMaestro> GetListasSync(string IdEmpresa);
     }
 
 
