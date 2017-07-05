@@ -121,7 +121,7 @@ namespace sdmcrmws.data
                 DBCommon.dbConn.AddInParameter(cmd, "@tot_Sub", DbType.Currency, decimal.Parse(Cotizacion.Subtotal));
                 DBCommon.dbConn.AddInParameter(cmd, "@tot_Descuento", DbType.Currency, decimal.Parse(Cotizacion.Descuento));
                 DBCommon.dbConn.AddInParameter(cmd, "@tot_Iva", DbType.Currency, decimal.Parse(Cotizacion.Iva));
-                DBCommon.dbConn.AddInParameter(cmd, "@tot_Tot", DbType.Currency, decimal.Parse(Cotizacion.Subtotal));
+                DBCommon.dbConn.AddInParameter(cmd, "@tot_Tot", DbType.Currency, decimal.Parse(Cotizacion.Total));
                 DBCommon.dbConn.AddInParameter(cmd, "@idestado", DbType.Int32, int.Parse(Cotizacion.Estado));
                 DBCommon.dbConn.AddInParameter(cmd, "@moneda", DbType.Int32, int.Parse(Cotizacion.Moneda));
                 DBCommon.dbConn.AddInParameter(cmd, "@Tasa", DbType.Currency, decimal.Parse(Cotizacion.Tasa));

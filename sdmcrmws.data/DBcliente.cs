@@ -329,7 +329,7 @@ namespace sdmcrmws.data
                 DBCommon.dbConn.AddInParameter(cmd, "@tel1", DbType.String, cliente.Campo_9);//
                 DBCommon.dbConn.AddInParameter(cmd, "@tel2", DbType.String, cliente.Campo_10);//
                 DBCommon.dbConn.AddInParameter(cmd, "@dir", DbType.String, cliente.Campo_14);//
-                DBCommon.dbConn.AddInParameter(cmd, "@url", DbType.String, "");
+                DBCommon.dbConn.AddInParameter(cmd, "@url", DbType.String, cliente.Campo_46);
                 DBCommon.dbConn.AddInParameter(cmd, "@est", DbType.Int16, 0);
                 DBCommon.dbConn.AddInParameter(cmd, "@vend", DbType.Int32, Helper.Bcero(cliente.Campo_23));//
                 DBCommon.dbConn.AddInParameter(cmd, "@act", DbType.Int32, 0);
@@ -345,7 +345,7 @@ namespace sdmcrmws.data
                 DBCommon.dbConn.AddInParameter(cmd, "@cupo", DbType.Int32, Helper.Bcero(cliente.Campo_33));//
                 DBCommon.dbConn.AddInParameter(cmd, "@IdTipoTributario", DbType.Int32, Helper.Bcero(cliente.Campo_6));//
                 DBCommon.dbConn.AddInParameter(cmd, "@digito", DbType.Int32, Helper.Bcero(cliente.Campo_4));//
-                DBCommon.dbConn.AddInParameter(cmd, "@idcontacto", DbType.Int32, 0);
+                DBCommon.dbConn.AddInParameter(cmd, "@idcontacto", DbType.Int32, Helper.Bcero(cliente.Campo_45));
                 DBCommon.dbConn.AddInParameter(cmd, "@codigo", DbType.String, cliente.Campo_3);//
               
 
@@ -356,6 +356,29 @@ namespace sdmcrmws.data
                 catch
                 {
                     throw;
+                }
+
+                //Actualizar la información que pertenece al contacto principal. Mail
+                DbCommand cmdc = DBCommon.dbConn.GetStoredProcCommand("CMPut_contacto");
+                DBCommon.dbConn.AddInParameter(cmdc, "@id_cot_cliente", DbType.Int32, cliente.Campo_1);
+                DBCommon.dbConn.AddInParameter(cmdc, "@id", DbType.Int32, Helper.Bcero(cliente.Campo_45));
+                DBCommon.dbConn.AddInParameter(cmdc, "@email", DbType.String, cliente.Campo_15);
+                DBCommon.dbConn.AddInParameter(cmdc, "@fecha_cumple", DbType.String, cliente.Campo_27);
+                DBCommon.dbConn.ExecuteNonQuery(cmdc);
+                               
+
+                if (int.Parse(cliente.Campo_1)==0)
+                {
+
+
+                    DbCommand cmdcl = DBCommon.dbConn.GetStoredProcCommand("GetCotClientes");
+                    DBCommon.dbConn.AddInParameter(cmdcl, "@id", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmdcl, "@Nit", DbType.String, cliente.Campo_3);
+                    DBCommon.dbConn.AddInParameter(cmdcl, "@Emp", DbType.Int32, int.Parse(cliente.Campo_41));
+                   
+                    DataSet dsc = DBCommon.dbConn.ExecuteDataSet(cmdcl);
+                    obj.IdGenerado = int.Parse(dsc.Tables[0].Rows[0]["id"].ToString()).ToString();
+                    
                 }
 
                 obj.Estado = "ok";

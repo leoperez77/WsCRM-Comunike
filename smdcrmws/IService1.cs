@@ -249,6 +249,18 @@ namespace smdcrmws
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetListasSync/{IdEmpresa}")]
         List<wsMaestro> GetListasSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetDetallePlanesSync/{IdEmpresa}")]
+        List<wsMaestro> GetDetallePlanesSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "PutDetallePlanSync/{IdDetalle}")]
+        wsControl PutDetallePlanSync(string IdDetalle);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetStockTotal/{IdEmpresa}")]
+        List<wsMaestro> GetStockTotal(string IdEmpresa);
     }
 
 

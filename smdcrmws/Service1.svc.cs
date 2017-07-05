@@ -372,5 +372,22 @@ namespace smdcrmws
         {
             return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_item_listas");
         }
+
+        public List<wsMaestro> GetDetallePlanesSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_item_prereq");
+        }
+
+        public wsControl PutDetallePlanSync(string IdDetalle)
+        {
+            return DBItem.PutDetallePlanSincronizar(IdDetalle);
+        }
+
+        public List<wsMaestro> GetStockTotal(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGet_Stock");
+        }
+
+       
     }
 }

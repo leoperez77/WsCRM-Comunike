@@ -85,8 +85,8 @@ select top 5
 	campo_42 = ltrim(rtrim(convert(varchar, id_cot_forma_pago))),				-- id forma de pago, se relaciona con la tabla cot_forma_pago
 	campo_43 = ltrim(rtrim(convert(varchar, id_cot_zona_sub))),					-- zona ( id de la subzona asociada )
 	campo_44 = ltrim(rtrim(convert(varchar, id_cot_cliente_perfil))),			-- perfil del cliente tabla cot_cliente_perfil
-	campo_45 = '',
-	campo_46 = '',
+	campo_45 = ltrim(rtrim(convert(varchar, id_cot_cliente_contacto))),			-- id del contacto principal
+	campo_46 = ltrim(rtrim(convert(varchar, url))),								-- url ó correo del proveedor
 	campo_47 = '',
 	campo_48 = '',
 	campo_49 = '',
@@ -212,8 +212,8 @@ select top 5
 	campo_38 = ltrim(rtrim(convert(varchar,precio_und2))),
 	campo_39 = ltrim(rtrim(convert(varchar,id_veh_ano))),					-- Indica el modelo al que pertenece el item cuando es vehículo
 	campo_40 = ltrim(rtrim(convert(varchar,calificacion_abc))),				-- si es 'O' es una operación de taller
-	campo_41 = '',
-	campo_42 = '',
+	campo_41 = ltrim(rtrim(convert(varchar,id_veh_linea))),
+	campo_42 = ltrim(rtrim(convert(varchar,id_veh_linea_modelo))),
 	campo_43 = '',
 	campo_44 = '',
 	campo_45 = '',
@@ -1265,11 +1265,11 @@ select top 5
 	campo_1 = ltrim(rtrim(convert(varchar,o.id))),							-- identificadór único del lote (vehículo ó maquinaria)
 	campo_2 = ltrim(rtrim(convert(varchar,id_cot_item))),					-- id del modelo_año al que pertenece
 	campo_3 = ltrim(rtrim(convert(varchar,lote))),							-- Serial
-	campo_4 = ltrim(rtrim(convert(varchar,o.fecha_creacion))),
-	campo_5 = ltrim(rtrim(convert(varchar,o.fecha_vencimiento))),
+	campo_4 = dbo.CMFormatoFecha(o.fecha_creacion),
+	campo_5 = dbo.CMFormatoFecha(o.fecha_vencimiento),
 	campo_6 = ltrim(rtrim(convert(varchar,o.notas))),
 	campo_7 =	'',
-	campo_8 = ltrim(rtrim(convert(varchar,fecha_modif))),
+	campo_8 = dbo.CMFormatoFecha(fecha_modif),
 	campo_9 = ltrim(rtrim(convert(varchar,vin))),
 	campo_10 = ltrim(rtrim(convert(varchar,o.motor))),
 	campo_11 = ltrim(rtrim(convert(varchar,placa))),
@@ -1399,6 +1399,7 @@ as
 		
 go
 
+
 IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGettal_planes')
 	DROP PROC CMGettal_planes
 GO
@@ -1497,18 +1498,18 @@ As
 	select	
 			tipo=t.descripcion,
 			numero = ltrim(rtrim(convert(varchar,c.numero_cotizacion))),
-			ltrim(rtrim(convert(varchar,c.id))),
+			id = ltrim(rtrim(convert(varchar,c.id))),
 			fecha= dbo.CMFormatoFecha(isnull(c.fecha_cartera,c.fecha)),
-			ltrim(rtrim(convert(varchar,c.total_iva))),
-			ltrim(rtrim(convert(varchar,c.total_total))),
+			total_iva = ltrim(rtrim(convert(varchar,c.total_iva))),
+			total = ltrim(rtrim(convert(varchar,c.total_total))),
 			valor_aplicado = ltrim(rtrim(convert(varchar,isnull(s.valor_aplicado,0)))),
 			saldo = ltrim(rtrim(convert(varchar,c.total_total-IsNull(s.valor_aplicado,0)))),		
 			vencimiento=dbo.CMFormatoFecha(c.fecha_estimada),
 			dias_vencido=ltrim(rtrim(convert(varchar,datediff(d,c.fecha_estimada,getdate())))),
 			forma_pago=f.descripcion,
 			bodega=b.descripcion,			
-			ltrim(rtrim(convert(varchar,t.sw))),							-- indica la naturaleza del documento. 1 factura (ver módulo en advance)
-			c.notas		
+			sw = ltrim(rtrim(convert(varchar,t.sw))),							-- indica la naturaleza del documento. 1 factura (ver módulo en advance)
+			notas = c.notas		
 	from cot_cotizacion c 
 		join cot_cliente cli2 on cli2.id=c.id_cot_cliente
 		left join cot_forma_pago f on f.id=c.id_cot_forma_pago
@@ -1637,5 +1638,133 @@ select
  FROM	cot_item_listas
  WHERE id_emp = @id_emp
 GO
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_item_prereq')
+	DROP PROC CMGetcot_item_prereq
+GO
+
+CREATE PROC CMGetcot_item_prereq @id_emp int 
+
+AS
+
+select top 5
+	campo_1 = ltrim(rtrim(convert(varchar,id_cot_item))),
+	campo_2 = ltrim(rtrim(convert(varchar,id_cot_item_prereq))),
+	campo_3 = ltrim(rtrim(convert(varchar,cantidad_obligada))),
+	campo_4 = ltrim(rtrim(convert(varchar,id_tal_planes))),
+	campo_5 = ltrim(rtrim(convert(varchar,id_crm))),					-- creado para control
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	cot_item_prereq p
+	join cot_item i on i.id = p.id_cot_item
+	left join cm_logcambios l on l.tabla = 'cot_item_prereq' and l.idvalor = p.id_crm
+ WHERE id_emp = @id_emp and isnull(l.estado,0) in (0,2)
+ ORDER BY p.id_crm
+GO
+
+----
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMSynccot_item_prereq')
+	drop procedure CMSynccot_item_prereq
+go
+
+create procedure CMSynccot_item_prereq
+	@id int
+as
+begin
+	if not exists(select id from cm_logcambios where tabla = 'cot_item_prereq' and idvalor = @id)
+		insert into cm_logcambios(tabla, idvalor, estado)
+		values('cot_item_prereq', @id, 99)
+	else
+		update cm_logcambios
+		set estado = 99
+		where tabla = 'cot_item_prereq' and idvalor = @id
+end 
+go
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGet_Stock')
+	drop procedure CMGet_Stock
+go
+
+create procedure CMGet_Stock @id_emp int  as
+select 
+	Campo_1 = ltrim(rtrim(convert(varchar,s.id_cot_bodega))), 
+	Campo_2 = ltrim(rtrim(convert(varchar,id_cot_item))), 
+	Campo_3 = ltrim(rtrim(convert(varchar,id_cot_item_lote))), 
+	Campo_4 = ltrim(rtrim(convert(varchar,stock))),
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+from v_cot_item_stock_real s
+	join cot_item i on i.id = s.id_cot_item
+where id_Emp = @id_emp 
+order by id_cot_item
+GO
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMPut_contacto')
+	DROP PROC CMPut_contacto
+GO
+
+
+----------------------------------------------------------------------------
+-- Insert a single record into cot_cliente_contacto
+----------------------------------------------------------------------------
+CREATE PROC CMPut_contacto
+	@id_cot_cliente int,
+	@id int,
+	@email nvarchar(160) = NULL,	
+	@fecha_cumple varchar(20)
+AS
+	declare @idreal int = 0
+	declare @fecha date
+
+	set @fecha = cast(@fecha_cumple as date)
+
+	IF @id = 0 
+	begin
+		select @idreal = isnull(id_cot_cliente_contacto,0)
+		from cot_cliente 
+		where id = @id_cot_cliente
+
+		if @idreal = 0
+			select @idreal = max(id)
+			from cot_cliente_contacto
+			where id_cot_cliente = @id_cot_cliente
+	end
+	else
+		set @idreal = @id
+
+		select top 10 * from cot_cliente_contacto
+		where mes_dia_cumple is not null
+
+	UPDATE	cot_cliente_contacto
+	SET
+	email = @email,	
+	mes_dia_cumple = cast(month(@fecha)as varchar) + replicate('0',2-len(cast(day(@fecha)as varchar))) + cast(day(@fecha)as varchar)	,
+	ano_cumple = cast(year(@fecha)as varchar)
+	WHERE id = @idreal
+GO
+
+
+
+
+
 
 
