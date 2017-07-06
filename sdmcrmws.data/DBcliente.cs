@@ -347,7 +347,8 @@ namespace sdmcrmws.data
                 DBCommon.dbConn.AddInParameter(cmd, "@digito", DbType.Int32, Helper.Bcero(cliente.Campo_4));//
                 DBCommon.dbConn.AddInParameter(cmd, "@idcontacto", DbType.Int32, Helper.Bcero(cliente.Campo_45));
                 DBCommon.dbConn.AddInParameter(cmd, "@codigo", DbType.String, cliente.Campo_3);//
-              
+                DBCommon.dbConn.AddInParameter(cmd, "@id_cot_cliente_pais", DbType.Int32, Helper.Bcero(cliente.Campo_19));//
+                
 
                 try
                 {

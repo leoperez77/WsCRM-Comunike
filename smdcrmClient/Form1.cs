@@ -60,7 +60,7 @@ namespace smdcrmClient
                 obj.Total = "111424000";
                 obj.Estado = "0"; // envía la misma empresa. revisar
                 obj.Moneda = "0";
-                obj.Tasa = "1";
+                obj.Tasa = "2";
                 obj.FechaEstimada = "2017-05-10";
                 obj.Factibilidad = "50";
                 obj.NotasInternas = "Estas son las notas internas no visibles para el cliente";

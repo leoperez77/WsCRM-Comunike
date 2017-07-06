@@ -266,6 +266,7 @@ IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGettipo_tributarios')
 	drop procedure CMGettipo_tributarios
 go
 
+
 CREATE PROC CMGettipo_tributarios @id_emp int
 AS
 select 
@@ -285,8 +286,8 @@ select
 	campo_14 = '',
 	campo_15 = ''
 FROM	tipo_tributario t
-	join tipo_tributario_emp e on e.id_tipo_tributario = t.id
-where e.id_emp = @id_emp
+	--join tipo_tributario_emp e on e.id_tipo_tributario = t.id
+where id_pais = 2 and tipo_identificacion = 'N' --e.id_emp = @id_emp
 GO
 
 IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_cliente_paises')
