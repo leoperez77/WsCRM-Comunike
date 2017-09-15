@@ -35,6 +35,7 @@
             this.optOrden = new System.Windows.Forms.RadioButton();
             this.optPedido = new System.Windows.Forms.RadioButton();
             this.optCita = new System.Windows.Forms.RadioButton();
+            this.optOperacion = new System.Windows.Forms.RadioButton();
             this.SuspendLayout();
             // 
             // textBox1
@@ -109,11 +110,23 @@
             this.optCita.Text = "Cita";
             this.optCita.UseVisualStyleBackColor = true;
             // 
+            // optOperacion
+            // 
+            this.optOperacion.AutoSize = true;
+            this.optOperacion.Location = new System.Drawing.Point(430, 12);
+            this.optOperacion.Name = "optOperacion";
+            this.optOperacion.Size = new System.Drawing.Size(79, 17);
+            this.optOperacion.TabIndex = 7;
+            this.optOperacion.TabStop = true;
+            this.optOperacion.Text = "Operación";
+            this.optOperacion.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(685, 272);
+            this.Controls.Add(this.optOperacion);
             this.Controls.Add(this.optCita);
             this.Controls.Add(this.optPedido);
             this.Controls.Add(this.optOrden);
@@ -138,6 +151,7 @@
         private System.Windows.Forms.RadioButton optOrden;
         private System.Windows.Forms.RadioButton optPedido;
         private System.Windows.Forms.RadioButton optCita;
+        private System.Windows.Forms.RadioButton optOperacion;
     }
 }
 

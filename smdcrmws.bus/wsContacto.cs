@@ -9,7 +9,7 @@ namespace smdcrmws.dto
 {
     [DataContract]
     [Serializable]
-    public class wsContacto:wsMaestro
+    public class wsContacto:wsMaestroBase
     {
        
     }

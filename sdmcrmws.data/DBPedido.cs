@@ -103,14 +103,26 @@ namespace sdmcrmws.data
                     DBCommon.dbConn.AddInParameter(cmd, "@preciomasiva", DbType.Currency, detalle.Subtotal);
                     DBCommon.dbConn.AddInParameter(cmd, "@porcentaje_descuento", DbType.Currency, detalle.Descuento);
                     DBCommon.dbConn.AddInParameter(cmd, "@porcentaje_descuento_grupo", DbType.Currency, -1);
-                    DBCommon.dbConn.AddInParameter(cmd, "@ignorarstock", DbType.Int16, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@ignorarstock", DbType.Int16, 1);
                     DBCommon.dbConn.AddInParameter(cmd, "@idlote", DbType.Int32, detalle.IdLote);
                     DBCommon.dbConn.AddInParameter(cmd, "@conv", DbType.Currency, detalle.Conversion);
                     DBCommon.dbConn.AddInParameter(cmd, "@und", DbType.Int16, 0);
                     DBCommon.dbConn.AddInParameter(cmd, "@descu_escal", DbType.Currency, 0);
                     DBCommon.dbConn.AddInParameter(cmd, "@iva2", DbType.Currency, 0);
-                    DBCommon.dbConn.AddInParameter(cmd, "@id_iva2", DbType.Int16, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@id_iva2", DbType.Int16, 0);                    
                     DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
+
+                    if(detalle.Facturar != "")
+                    {
+                        cmd = DBCommon.dbConn.GetStoredProcCommand("PutFacturarCotPedidoItems");
+                        DBCommon.dbConn.AddInParameter(cmd, "@renglon", DbType.Int32, Linea);
+                        DBCommon.dbConn.AddInParameter(cmd, "@idcot", DbType.Int32, IdRetorno);
+                        DBCommon.dbConn.AddInParameter(cmd, "@iditem", DbType.Int32, detalle.IdItem);
+                        DBCommon.dbConn.AddInParameter(cmd, "@fac", DbType.String, detalle.Facturar);
+                        DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
+                    }
+                    
+
                     Linea++;
                 }
 
@@ -136,6 +148,75 @@ namespace sdmcrmws.data
             finally
             {
                 Conn.Close();
+            }
+
+            return obj;
+        }
+
+        public static wsPedido GetPedido(int IdPedido)
+        {
+            DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMGet_cot_pedido");
+            DBCommon.dbConn.AddInParameter(cmd, "@IdPedido", DbType.Int32, IdPedido);
+
+            var obj = new wsPedido();
+            using (IDataReader dr = DBCommon.dbConn.ExecuteReader(cmd))
+            {
+                if (dr.Read())
+                {
+                    obj.Bodega = dr["bodega"].ToString();
+                    obj.Cliente = dr["cliente"].ToString();
+                    obj.Contacto = dr["contacto"].ToString();
+                    obj.Descuento = dr["descuento"].ToString();
+                    obj.Dias = dr["dias"].ToString();
+                    obj.Estado = dr["estado"].ToString();
+                    obj.Factibilidad = dr["factibilidad"].ToString();
+                    obj.Fecha = dr["fecha"].ToString();
+                    obj.FechaEstimada = dr["fechaestimada"].ToString();
+                    obj.FormaPago = dr["formapago"].ToString();
+                    obj.Id = dr["id"].ToString();
+                    obj.IdEmpresa = dr["idempresa"].ToString();
+                    obj.IdOrden = dr["idorden"].ToString();
+                    obj.Iva = dr["iva"].ToString();
+                    obj.Moneda = dr["moneda"].ToString();
+                    obj.Notas = dr["notas"].ToString();
+                    obj.NotasInternas = dr["notasinternas"].ToString();
+                    obj.Numero = dr["numero"].ToString();
+                    obj.NumeroReferencia = dr["numeroreferencia"].ToString();
+                    obj.Subtotal = dr["subtotal"].ToString();
+                    obj.Tasa = dr["tasa"].ToString();
+                    obj.TipoDocumento = dr["tipodocumento"].ToString();
+                    obj.TipoReferencia = dr["tiporeferencia"].ToString();
+                    obj.Total = dr["total"].ToString();
+                    obj.Usuario = dr["usuario"].ToString();
+                    obj.Vendedor = dr["vendedor"].ToString();
+                }
+                dr.Close();
+            }
+
+            cmd = DBCommon.dbConn.GetStoredProcCommand("CMGet_cot_pedido_item");
+            DBCommon.dbConn.AddInParameter(cmd, "@IdPedido", DbType.Int32, IdPedido);
+            using (IDataReader dr = DBCommon.dbConn.ExecuteReader(cmd))
+            {
+                while (dr.Read())
+                {
+                    var det = new wsDetallePedido();
+                    det.Cantidad = dr["cantidad"].ToString();
+                    det.Conversion = dr["conversion"].ToString();
+                    det.Descuento = dr["descuento"].ToString();
+                    det.Id = dr["id"].ToString();
+                    det.IdCotizacion = dr["idcotizacion"].ToString();
+                    det.IdItem = dr["iditem"].ToString();
+                    det.IdLote = dr["idlote"].ToString();
+                    det.Iva = dr["iva"].ToString();
+                    det.Notas = dr["notas"].ToString();
+                    det.Precio = dr["precio"].ToString();
+                    det.PrecioCotizado = dr["PrecioCotizado"].ToString();
+                    det.Renglon = dr["renglon"].ToString();
+                    det.Subtotal = dr["subtotal"].ToString();
+                    det.Und = dr["und"].ToString();
+                    det.Facturar = dr["facturar_a"].ToString();
+                    obj.Detalle.Add(det);
+                }
             }
 
             return obj;

@@ -165,7 +165,8 @@ namespace sdmcrmws.data
                     det.Lote = drd["lote"].ToString();
                     det.Pendiente = drd["pendiente"].ToString();
                     det.Stock = drd["stock"].ToString();
-                    det.Vencimiento = DateTime.Parse(drd["fecha_vencimiento"].ToString()).ToString("yyyy-MM-dd");
+                    if(drd["fecha_vencimiento"].ToString()!="")
+                        det.Vencimiento = DateTime.Parse(drd["fecha_vencimiento"].ToString()).ToString("yyyy-MM-dd");
                     ldet.Add(det);
                 }
                 obj.Detalle = ldet;

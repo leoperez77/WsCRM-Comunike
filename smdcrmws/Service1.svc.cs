@@ -289,7 +289,18 @@ namespace smdcrmws
 
         public wsControl PutCliente(Stream JSONdataStream)
         {
-            return DBcliente.PutCliente(JSONdataStream);
+            try
+            {
+                return DBcliente.PutCliente(JSONdataStream);
+            }
+            catch (Exception ex)
+            {
+                //  Return any exception messages back to the Response header
+                OutgoingWebResponseContext response = WebOperationContext.Current.OutgoingResponse;
+                response.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                response.StatusDescription = (ex.Message + ex.InnerException.Message).Replace("\r\n", "");
+                return null;
+            }
         }
 
         public wsControl PutCotCliente(Stream JSONdataStream)
@@ -388,6 +399,127 @@ namespace smdcrmws
             return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGet_Stock");
         }
 
-       
+        public List<wsMaestro> GetUsuarioSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGet_Usuarios");
+        }
+
+        public List<wsMaestro> GetSustitutos(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_item_sus");
+        }
+
+        public List<wsMaestro> GetTarifasIva(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_iva");
+        }
+
+        public List<wsVehiculo> GetStockVehiculos(string IdEmpresa, string IdBodega)
+        {
+            try
+            {
+                return DBVehiculos.GetStockVehiculos(IdEmpresa, IdBodega);
+            }
+            catch (Exception ex)
+            {
+                //  Return any exception messages back to the Response header
+                OutgoingWebResponseContext response = WebOperationContext.Current.OutgoingResponse;
+                response.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                response.StatusDescription = ex.Message.Replace("\r\n", "");
+                return null;
+            }
+        }
+
+        public wsControl putEstadoOperacion(Stream JSONdataStream)
+        {
+            try
+            {
+                return DBOrden.putEstadoOperacion(JSONdataStream);
+            }
+            catch (Exception ex)
+            {
+                //  Return any exception messages back to the Response header
+                OutgoingWebResponseContext response = WebOperationContext.Current.OutgoingResponse;
+                response.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                response.StatusDescription = ex.Message.Replace("\r\n", "");
+                return null;
+            }
+        }
+
+        public List<wsMaestro> GetOrigenesSync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_cliente_origenes");
+        }
+
+        public wsControl putEjecucionOperacion(Stream JSONdataStream)
+        {
+            try
+            {
+                return DBOrden.putEjecucionOperacion(JSONdataStream);
+            }
+            catch (Exception ex)
+            {
+                //  Return any exception messages back to the Response header
+                OutgoingWebResponseContext response = WebOperationContext.Current.OutgoingResponse;
+                response.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                response.StatusDescription = ex.Message.Replace("\r\n", "");
+                return null;
+            }
+        }
+
+        public List<wsPedido> GetPedidosCliente(string IdCliente, string FechaDesde, string FechaHasta)
+        {
+           
+            try
+            {
+                return DBcliente.GetPedidos(int.Parse(IdCliente), DateTime.Parse(FechaDesde), DateTime.Parse(FechaHasta));
+
+            }
+            catch (Exception ex)
+            {
+                //  Return any exception messages back to the Response header
+                OutgoingWebResponseContext response = WebOperationContext.Current.OutgoingResponse;
+                response.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                response.StatusDescription = ex.Message.Replace("\r\n", "");
+                return null;
+            }
+           
+        }
+
+        public wsPedido GetPedido(string IdPedido)
+        {
+           
+            try
+            {
+                return DBPedido.GetPedido(int.Parse(IdPedido));
+
+            }
+            catch (Exception ex)
+            {
+                //  Return any exception messages back to the Response header
+                OutgoingWebResponseContext response = WebOperationContext.Current.OutgoingResponse;
+                response.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                response.StatusDescription = ex.Message.Replace("\r\n", "");
+                return null;
+            }
+            
+        }
+
+        public wsOrdenTaller GetOrden(string IdOrden)
+        {
+            try
+            {
+                return DBOrden.GetOrden(int.Parse(IdOrden));
+
+            }
+            catch (Exception ex)
+            {
+                //  Return any exception messages back to the Response header
+                OutgoingWebResponseContext response = WebOperationContext.Current.OutgoingResponse;
+                response.StatusCode = System.Net.HttpStatusCode.InternalServerError;
+                response.StatusDescription = ex.Message.Replace("\r\n", "");
+                return null;
+            }
+        }
     }
 }

@@ -261,6 +261,47 @@ namespace smdcrmws
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetStockTotal/{IdEmpresa}")]
         List<wsMaestro> GetStockTotal(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetUsuariosSync/{IdEmpresa}")]
+        List<wsMaestro> GetUsuarioSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetSustitutos/{IdEmpresa}")]
+        List<wsMaestro> GetSustitutos(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetTarifasIva/{IdEmpresa}")]
+        List<wsMaestro> GetTarifasIva(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetStockVehiculos/{IdEmpresa}/{IdBodega}")]
+        List<wsVehiculo> GetStockVehiculos(string IdEmpresa, string IdBodega);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putEstadoOperacion")]
+        wsControl putEstadoOperacion(Stream JSONdataStream);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getOrigenesSync/{IdEmpresa}")]
+        List<wsMaestro> GetOrigenesSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putEjecucionOperacion")]
+        wsControl putEjecucionOperacion(Stream JSONdataStream);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getPedidosCliente/{IdCliente}/{FechaDesde}/{FechaHasta}")]
+        List<wsPedido> GetPedidosCliente(string IdCliente, string FechaDesde, string FechaHasta);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getPedido/{IdPedido}")]
+        wsPedido GetPedido(string IdPedido);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getOrden/{IdOrden}")]
+        wsOrdenTaller GetOrden(string IdOrden);
+
     }
 
 

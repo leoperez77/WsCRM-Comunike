@@ -88,6 +88,9 @@ namespace smdcrmws.dto
         public String IdOrden { get; set; }
 
         [DataMember]
+        public String Numero { get; set; }
+
+        [DataMember]
         public List<wsDetallePedido> Detalle = new List<wsDetallePedido>();
                 
     }
@@ -135,6 +138,9 @@ namespace smdcrmws.dto
 
         [DataMember]
         public String IdLote { get; set; }
+
+        [DataMember]
+        public String Facturar { get; set; }
 
     }    
 }

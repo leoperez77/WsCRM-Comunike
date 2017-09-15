@@ -98,6 +98,9 @@ namespace smdcrmws.dto
         public String IdCita { get; set; }
 
         [DataMember]
+        public String Numero { get; set; }
+
+        [DataMember]
         public List<wsOperacionOrden> Detalle = new List<wsOperacionOrden>();
     }
         

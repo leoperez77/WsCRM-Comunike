@@ -133,5 +133,170 @@ namespace sdmcrmws.data
 
             return obj;
         }
+
+        public static wsControl putEstadoOperacion(Stream JSONdataStream)
+        {
+            wsControl obj = new wsControl();
+            obj.FechaHora = DateTime.Now.ToString();
+            obj.Origen = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+            SqlConnection Conn = (SqlConnection)DBCommon.dbConn.CreateConnection();
+            Conn.Open();
+            SqlTransaction Tr = Conn.BeginTransaction();
+
+            try
+            {
+                // Read in our Stream into a string...
+                StreamReader reader = new StreamReader(JSONdataStream);
+                string JSONdata = reader.ReadToEnd();
+
+                var Operacion = JsonConvert.DeserializeObject<wsOperacion>(JSONdata);
+
+                if (Operacion == null)
+                {
+                    throw new System.InvalidOperationException("Objeto JSON no pudo convertirse en Opercion");
+                }
+                
+                DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMPut_EstadoOperacion");
+                DBCommon.dbConn.AddInParameter(cmd, "@id_cot_cotizacion_item", DbType.Int32, int.Parse(Operacion.IdLineaOperacion));
+                DBCommon.dbConn.AddInParameter(cmd, "@id_usuario_autorizo", DbType.Int32, int.Parse(Operacion.IdUsuario));
+                DBCommon.dbConn.AddInParameter(cmd, "@autorizo", DbType.Int32, int.Parse(Operacion.Estado));
+                DBCommon.dbConn.AddInParameter(cmd, "@id_con_cco", DbType.Int32, int.Parse(Operacion.IdCentro));
+                
+                DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
+
+                Tr.Commit();
+
+                obj.IdGenerado = "0";
+                obj.Estado = "ok";
+            }
+            catch (Exception ex)
+            {
+                Tr.Rollback();
+                obj.Estado = "error";
+                obj.Error = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    obj.Error += Environment.NewLine + ex.InnerException.Message;
+                }
+            }
+            finally
+            {
+                Conn.Close();
+            }
+
+            return obj;
+
+        }
+
+        public static wsControl putEjecucionOperacion(Stream JSONdataStream)
+        {
+            wsControl obj = new wsControl();
+            obj.FechaHora = DateTime.Now.ToString();
+            obj.Origen = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+            SqlConnection Conn = (SqlConnection)DBCommon.dbConn.CreateConnection();
+            Conn.Open();
+            SqlTransaction Tr = Conn.BeginTransaction();
+
+            try
+            {
+                // Read in our Stream into a string...
+                StreamReader reader = new StreamReader(JSONdataStream);
+                string JSONdata = reader.ReadToEnd();
+
+                var Operacion = JsonConvert.DeserializeObject<wsOperacion>(JSONdata);
+
+                if (Operacion == null)
+                {
+                    throw new System.InvalidOperationException("Objeto JSON no pudo convertirse en Operacion");
+                }
+
+                DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMPut_EjecucionOperacion");
+                DBCommon.dbConn.AddInParameter(cmd, "@id_cot_cotizacion_item", DbType.Int32, int.Parse(Operacion.IdLineaOperacion));
+                DBCommon.dbConn.AddInParameter(cmd, "@que", DbType.Int32, int.Parse(Operacion.Estado));             
+                DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
+
+                Tr.Commit();
+
+                obj.IdGenerado = "0";
+                obj.Estado = "ok";
+            }
+            catch (Exception ex)
+            {
+                Tr.Rollback();
+                obj.Estado = "error";
+                obj.Error = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    obj.Error += Environment.NewLine + ex.InnerException.Message;
+                }
+            }
+            finally
+            {
+                Conn.Close();
+            }
+
+            return obj;
+
+        }
+
+        public static wsOrdenTaller GetOrden(int IdOrden)
+        {
+            DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMGet_cot_cotizacion");
+            DBCommon.dbConn.AddInParameter(cmd, "@IdCotizacion", DbType.Int32, IdOrden);
+
+            var obj = new wsOrdenTaller();
+            using (IDataReader dr = DBCommon.dbConn.ExecuteReader(cmd))
+            {
+                if (dr.Read())
+                {
+                    obj.Bodega = dr["bodega"].ToString();
+                    obj.Cliente = dr["cliente"].ToString();
+                    obj.Contacto = dr["contacto"].ToString();
+                    obj.Descuento = dr["descuento"].ToString();                   
+                    obj.Fecha = dr["fecha"].ToString();
+                    obj.FechaEstimada = dr["fechaestimada"].ToString();                   
+                    obj.Id = dr["id"].ToString();
+                    obj.IdEmpresa = dr["idempresa"].ToString();                    
+                    obj.Iva = dr["iva"].ToString();                    
+                    obj.Notas = dr["notas"].ToString();
+                    obj.NotasInternas = dr["notasinternas"].ToString();
+                    obj.Numero = dr["numero"].ToString();
+                    obj.NumeroReferencia = dr["numeroreferencia"].ToString();
+                    obj.Subtotal = dr["subtotal"].ToString();                    
+                    obj.TipoDocumento = dr["tipodocumento"].ToString();
+                    obj.TipoReferencia = dr["tiporeferencia"].ToString();
+                    obj.Total = dr["total"].ToString();
+                    obj.Usuario = dr["usuario"].ToString();
+                    obj.Vendedor = dr["vendedor"].ToString();
+                }
+                dr.Close();
+            }
+
+            cmd = DBCommon.dbConn.GetStoredProcCommand("CMGet_cot_cotizacion_item");
+            DBCommon.dbConn.AddInParameter(cmd, "@IdCotizacion", DbType.Int32, IdOrden);
+            using (IDataReader dr = DBCommon.dbConn.ExecuteReader(cmd))
+            {
+                while (dr.Read())
+                {
+                    var det = new wsOperacionOrden();
+                    det.Cantidad = dr["cantidad"].ToString();                   
+                    det.Id = dr["id"].ToString();
+                    det.IdCotizacion = dr["idcotizacion"].ToString();
+                    det.IdItem = dr["iditem"].ToString();
+                    det.Iva = dr["iva"].ToString();
+                    det.Notas = dr["notas"].ToString();
+                    det.ValorHora = dr["descu_escal"].ToString();
+                    det.ValorOperacion = dr["can_tot_dis"].ToString();
+                    det.Renglon = dr["renglon"].ToString();       
+                    det.Facturar = dr["facturar_a"].ToString();
+                    det.Operario = dr["id_operario"].ToString();
+                    obj.Detalle.Add(det);
+                }
+            }
+
+            return obj;
+        }
     }
 }

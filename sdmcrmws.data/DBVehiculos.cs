@@ -138,5 +138,39 @@ namespace sdmcrmws.data
 
             return obj;
         }
+
+        public static List<wsVehiculo> GetStockVehiculos(string IdEmpresa, string IdBodega)
+        {
+            List<wsVehiculo> results = new List<wsVehiculo>();
+
+            DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("Get2540");
+            DBCommon.dbConn.AddInParameter(cmd, "@emp", DbType.Int16, int.Parse(IdEmpresa));
+            DBCommon.dbConn.AddInParameter(cmd, "@bod", DbType.Int16, int.Parse(IdBodega));
+            DBCommon.dbConn.AddInParameter(cmd, "@prov", DbType.Int16, 0);
+            DBCommon.dbConn.AddInParameter(cmd, "@item", DbType.Int16, 0);
+            DBCommon.dbConn.AddInParameter(cmd, "@solo_stock", DbType.Int16, 1);
+
+
+            //((RefCountingDataReader)db.ExecuteReader(command)).InnerReader as SqlDataReader;
+            using (IDataReader dr = DBCommon.dbConn.ExecuteReader(cmd))
+            {
+                while (dr.Read())
+                {
+                    wsVehiculo obj = new wsVehiculo();
+                    int iCampo = 1;
+                    for (int i = 0; i < dr.FieldCount; i++)
+                    {
+                        obj["Campo_" + iCampo.ToString()] = !dr.IsDBNull(i) ? dr[i].ToString() : "";
+                        iCampo++;
+                    }
+
+                    results.Add(obj);
+
+                }
+                dr.Close();
+            }
+
+            return results;
+        }
     }
 }

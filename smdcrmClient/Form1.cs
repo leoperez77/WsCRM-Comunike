@@ -248,6 +248,16 @@ namespace smdcrmClient
                 obj.IdVehiculo = "111006";
                 textBox1.Text = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
             }
+
+            if(optOperacion.Checked)
+            {
+                var obj = new wsOperacion();
+                obj.IdLineaOperacion = "2863070";
+                obj.IdUsuario = "0";
+                obj.IdCentro = "0";
+                obj.Estado = "1";
+                textBox1.Text = Newtonsoft.Json.JsonConvert.SerializeObject(obj);
+            }
         }
     }
 

@@ -87,9 +87,9 @@ select top 5
 	campo_44 = ltrim(rtrim(convert(varchar, id_cot_cliente_perfil))),			-- perfil del cliente tabla cot_cliente_perfil
 	campo_45 = ltrim(rtrim(convert(varchar, id_cot_cliente_contacto))),			-- id del contacto principal
 	campo_46 = ltrim(rtrim(convert(varchar, url))),								-- url ó correo del proveedor
-	campo_47 = '',
-	campo_48 = '',
-	campo_49 = '',
+	campo_47 = ltrim(rtrim(convert(varchar, id_cot_cliente_actividad))),		-- actividad mercantil del cliente
+	campo_48 = ltrim(rtrim(convert(varchar, id_cot_cliente_origen))),			-- origen del cliente
+	campo_49 = ltrim(rtrim(convert(varchar, id_tipo_tributario2))),				-- actividad económica
 	campo_50 = '',
 	campo_51 = '',
 	campo_52 = '',
@@ -158,6 +158,7 @@ select
 	join usuario_subgrupo s on u.id_usuario_subgrupo = s.id
 	join usuario_grupo g on g.id = s.id_usuario_grupo
  WHERE es_operario = 1 and id_emp = @id_emp
+	and isnull(anulado,0) = 0
 GO
 
 
@@ -1486,6 +1487,7 @@ IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGet_estadistica_cliente')
 	DROP PROC CMGet_estadistica_cliente
 GO
 
+
 CREATE procedure [dbo].[CMGet_estadistica_cliente]
 (
 	@id_cliente int,
@@ -1519,7 +1521,8 @@ As
 		Join usuario u on u.id=c.id_usuario_vende
 		Join cot_tipo t on t.id=c.id_cot_tipo
 		Join v_cot_factura_saldo s on s.id_cot_cotizacion=c.id	
-	where sw is not null 
+	where sw is not null  
+		and sw not in (46,60)
 		and c.id_cot_cliente = @id_cliente 
 		and c.fecha between @fecinf and @fecsup
 	union all
@@ -1644,6 +1647,7 @@ IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_item_prereq')
 	DROP PROC CMGetcot_item_prereq
 GO
 
+
 CREATE PROC CMGetcot_item_prereq @id_emp int 
 
 AS
@@ -1765,7 +1769,314 @@ GO
 
 
 
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGet_usuarios')
+	DROP PROC CMGet_usuarios
+GO
 
 
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla usuario
+----------------------------------------------------------------------------
+CREATE PROC CMGet_usuarios @id_emp int 
+
+AS
+
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,u.id))),
+	campo_2 = ltrim(rtrim(convert(varchar,id_usuario_subgrupo))),
+	campo_3 = ltrim(rtrim(convert(varchar,codigo_usuario))),
+	campo_4 = ltrim(rtrim(convert(varchar,nombre))),
+	campo_5 = ltrim(rtrim(convert(varchar,clave))),
+	campo_7 = ltrim(rtrim(convert(varchar,admin))),
+	campo_8 = ltrim(rtrim(convert(varchar,email))),
+	campo_9 = ltrim(rtrim(convert(varchar,cedula_nit))),
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''	
+ FROM	usuario u
+	join usuario_subgrupo s on s.id = u.id_usuario_subgrupo
+	join usuario_grupo g on g.id = s.id_usuario_grupo
+WHERE g.id_emp = @id_emp
+GO
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_item_sus')
+	DROP PROC CMGetcot_item_sus
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_item_sus
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_item_sus @id_emp int 
+AS
+
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id_cot_item))),
+	campo_2 = ltrim(rtrim(convert(varchar,id_cot_item_sus))),
+	campo_3 = ltrim(rtrim(convert(varchar,cantidad))),
+	campo_4 = ltrim(rtrim(convert(varchar,id_crm))),
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	cot_item_sus s
+	join cot_item i on i.id = s.id_cot_item
+WHERE id_emp = @id_emp
+GO
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_iva')
+	DROP PROC CMGetcot_iva
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_item_sus
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_iva @id_emp int 
+AS
+
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id))),
+	campo_2 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_3 = ltrim(rtrim(convert(varchar,porcentaje))),
+	campo_4 = '',
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	cot_iva 
+WHERE id_emp = @id_emp
+GO
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMPut_EstadoOperacion')
+	DROP PROC CMPut_EstadoOperacion
+GO
+
+CREATE PROCEDURE CMPut_EstadoOperacion 
+	@id_cot_cotizacion_item int, 
+	@id_usuario_autorizo int, 
+	@autorizo int, 
+	@id_con_cco int = 0
+As
+	if exists(select id_cot_cotizacion_item from cot_cotizacion_item_mas where id_cot_cotizacion_item = @id_cot_cotizacion_item)
+		update cot_cotizacion_item_mas
+		set autorizo = @autorizo, 
+			id_usuario_autorizo = case when @id_usuario_autorizo > 0 then @id_usuario_autorizo else null end
+		where id_cot_cotizacion_item = @id_cot_cotizacion_item
+	else
+		insert into cot_cotizacion_item_mas
+		(
+			id_cot_cotizacion_item, 
+			id_usuario_autorizo, 
+			id_con_cco, 
+			autorizo
+		)
+		values 
+		(
+			@id_cot_cotizacion_item, 
+			case when @id_usuario_autorizo > 0 then @id_usuario_autorizo else null end, 
+			case when @id_con_cco > 0 then @id_con_cco else null end,
+			case when @autorizo > 0 then @autorizo else null end
+		)
+GO
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGetcot_cliente_origenes')
+	DROP PROC CMGetcot_cliente_origenes
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla cot_cliente_actividad
+----------------------------------------------------------------------------
+CREATE PROC CMGetcot_cliente_origenes @id_emp int 
+AS
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id_emp))),
+	campo_2 = ltrim(rtrim(convert(varchar,id))),
+	campo_3 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_4 = dbo.CMFormatoFecha(fecha_modif),
+	campo_5 = '',
+	campo_6 = '',
+	campo_7 = '',
+	campo_8 = '',
+	campo_9 = '',
+	campo_10 = '',
+	campo_11 = '',
+	campo_12 = '',
+	campo_13 = '',
+	campo_14 = '',
+	campo_15 = ''
+ FROM	cot_cliente_origen
+  where id_emp = @id_emp
+GO
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMPut_EjecucionOperacion')
+	DROP PROC CMPut_EjecucionOperacion
+GO
+
+CREATE PROCEDURE CMPut_EjecucionOperacion
+	@id_cot_cotizacion_item int, 
+	@que int	
+As	
+	insert into tal_operaciones_tiempo
+	(
+		id_cot_cotizacion_item, 
+		que, 
+		fecha_hora
+	)
+	values 
+	(
+		@id_cot_cotizacion_item, 
+		@que, 
+		getdate()
+	)
+GO
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGet_cot_pedido')
+	DROP PROC CMGet_cot_pedido
+GO
+
+create procedure dbo.CMGet_cot_pedido  @idPedido int
+as
+select Id, Id_emp as IdEmpresa, id_usuario_vende as usuario, id_cot_bodega as bodega, 
+	dbo.CMFormatoFecha(fecha) as fecha, 
+	id_cot_tipo as TipoDocumento,
+		id_cot_cliente as cliente, id_usuario_vende as vendedor, id_cot_forma_pago as FormaPago, id_cot_cliente_contacto as Contacto,
+		dias_validez as dias, total_sub as subtotal, isnull(total_descuento,0) as descuento, isnull(total_iva,0) as Iva,
+		total_total as Total, id_cot_moneda as Moneda, tasa, 
+		dbo.CMFormatoFecha(fecha_estimada) as FechaEstimada, notas_internas as NotasInternas,
+		Notas, docref_tipo as TipoReferencia, docref_numero as NumeroReferencia, numero_cotizacion as Numero,
+		'' as Estado, 0 as Factibilidad, 0 as idorden
+from cot_pedido
+where id = @idPedido
+go
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGet_cot_pedido_item')
+	DROP PROC CMGet_cot_pedido_item
+GO
+
+create procedure dbo.CMGet_cot_pedido_item @idPedido int
+as
+select id, renglon, id_cot_pedido as idcotizacion, id_cot_item as IdItem, cantidad, precio_lista as Precio,
+	precio_cotizado as PrecioCotizado, porcentaje_iva as iva, notas, isnull(porcentaje_descuento,0) as Descuento,
+	id_cot_item_lote as IdLote, id_cot_unidades as Und, isnull(conversion,1) as Conversion,
+	 precio_cotizado * cantidad_und as subtotal,
+	 facturar_a
+from cot_pedido_item
+where id_cot_pedido = @idPedido
+order by renglon
+go
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'PutFacturarCotPedidoItems')
+	DROP PROC PutFacturarCotPedidoItems
+GO
+
+create procedure PutFacturarCotPedidoItems
+(
+	@renglon int, 
+	@idcot int, 
+	@iditem int, 
+	@fac char(1)	
+)
+as
+	if @fac<> ''
+		update cot_pedido_item
+		set facturar_a = @fac
+		where renglon = @renglon and id_cot_pedido_item = @iditem and id_cot_pedido = @idcot
+GO
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGet_cot_cotizacion')
+	DROP PROC CMGet_cot_cotizacion
+GO
+
+create procedure dbo.CMGet_cot_cotizacion  @idcotizacion int
+as
+select Id, 
+	Id_emp as IdEmpresa, 
+	id_usuario_vende as usuario, 
+	id_cot_bodega as bodega, 
+	dbo.CMFormatoFecha(fecha) as fecha, 
+	id_cot_tipo as TipoDocumento,
+	id_cot_cliente as cliente, 
+	id_usuario_vende as vendedor, 
+	id_cot_forma_pago as FormaPago, 
+	id_cot_cliente_contacto as Contacto,
+	dias_validez as dias, 
+	total_sub as subtotal, 
+	isnull(total_descuento,0) as descuento, 
+	isnull(total_iva,0) as Iva,
+	total_total as Total, 
+	id_cot_moneda as Moneda, 
+	tasa, 
+	dbo.CMFormatoFecha(fecha_estimada) as FechaEstimada, 
+	notas_internas as NotasInternas,
+	Notas, 
+	docref_tipo as TipoReferencia, 
+	docref_numero as NumeroReferencia, 
+	numero_cotizacion as Numero,
+	id_cot_cotizacion_estado as Estado, 
+	Factibilidad, 
+	id_cot_item_lote,
+	deducible,
+	deducible_minimo
+from cot_cotizacion
+where id = @idcotizacion
+go
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGet_cot_cotizacion_item')
+	DROP PROC CMGet_cot_cotizacion_item
+GO
+
+create procedure dbo.CMGet_cot_cotizacion_item @idCotizacion int
+as
+select id, 
+	renglon, 
+	id_cot_cotizacion as idcotizacion, 
+	id_cot_item as IdItem, 
+	cantidad, 
+	precio_lista as Precio,
+	precio_cotizado as PrecioCotizado, 
+	porcentaje_iva as iva, 
+	notas, 
+	isnull(porcentaje_descuento,0) as Descuento,
+	id_cot_item_lote as IdLote,
+	id_cot_unidades as Und, 
+	isnull(conversion,1) as Conversion,
+	 precio_cotizado * cantidad_und as subtotal,
+	 descu_escal, -- valor_hora
+	can_tot_dis, -- valor operación
+	facturar_a, 
+	id_operario
+from cot_cotizacion_item
+where id_cot_cotizacion = @idCotizacion
+order by renglon
+go
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGet_cot_item')
+	DROP PROC CMGet_cot_item
+GO
+
+create procedure CMGet_cot_item @id int
+as
+	select isnull(id_veh_ano,0) as id_veh_ano
+	from cot_item
+	where id = @id
+GO
 
 

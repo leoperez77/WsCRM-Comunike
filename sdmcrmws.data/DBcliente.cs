@@ -330,10 +330,10 @@ namespace sdmcrmws.data
                 DBCommon.dbConn.AddInParameter(cmd, "@tel2", DbType.String, cliente.Campo_10);//
                 DBCommon.dbConn.AddInParameter(cmd, "@dir", DbType.String, cliente.Campo_14);//
                 DBCommon.dbConn.AddInParameter(cmd, "@url", DbType.String, cliente.Campo_46);
-                DBCommon.dbConn.AddInParameter(cmd, "@est", DbType.Int16, 0);
+                DBCommon.dbConn.AddInParameter(cmd, "@est", DbType.Int16, Helper.Bcero(cliente.Campo_34));
                 DBCommon.dbConn.AddInParameter(cmd, "@vend", DbType.Int32, Helper.Bcero(cliente.Campo_23));//
-                DBCommon.dbConn.AddInParameter(cmd, "@act", DbType.Int32, 0);
-                DBCommon.dbConn.AddInParameter(cmd, "@ori", DbType.Int32, 0);
+                DBCommon.dbConn.AddInParameter(cmd, "@act", DbType.Int32, Helper.Bcero(cliente.Campo_47));
+                DBCommon.dbConn.AddInParameter(cmd, "@ori", DbType.Int32, Helper.Bcero(cliente.Campo_48));
                 DBCommon.dbConn.AddInParameter(cmd, "@tipclie", DbType.Int32, Helper.Bcero(cliente.Campo_22));//                
                 DBCommon.dbConn.AddInParameter(cmd, "@tipperfil", DbType.Int32, Helper.Bcero(cliente.Campo_44));//            
                 DBCommon.dbConn.AddInParameter(cmd, "@nit", DbType.String, cliente.Campo_2);//
@@ -348,6 +348,13 @@ namespace sdmcrmws.data
                 DBCommon.dbConn.AddInParameter(cmd, "@idcontacto", DbType.Int32, Helper.Bcero(cliente.Campo_45));
                 DBCommon.dbConn.AddInParameter(cmd, "@codigo", DbType.String, cliente.Campo_3);//
                 DBCommon.dbConn.AddInParameter(cmd, "@id_cot_cliente_pais", DbType.Int32, Helper.Bcero(cliente.Campo_19));//
+                DBCommon.dbConn.AddInParameter(cmd, "@FormaPago", DbType.Int32, Helper.Bcero(cliente.Campo_42));//
+                DBCommon.dbConn.AddInParameter(cmd, "@nom1", DbType.String, cliente.Campo_36);
+                DBCommon.dbConn.AddInParameter(cmd, "@nom2", DbType.String, cliente.Campo_37);
+                DBCommon.dbConn.AddInParameter(cmd, "@ape1", DbType.String, cliente.Campo_39);
+                DBCommon.dbConn.AddInParameter(cmd, "@ape2", DbType.String, cliente.Campo_40);
+                DBCommon.dbConn.AddInParameter(cmd, "@IdTipoTributario2", DbType.String, Helper.Bcero(cliente.Campo_49));
+
                 
 
                 try
@@ -379,7 +386,28 @@ namespace sdmcrmws.data
                    
                     DataSet dsc = DBCommon.dbConn.ExecuteDataSet(cmdcl);
                     obj.IdGenerado = int.Parse(dsc.Tables[0].Rows[0]["id"].ToString()).ToString();
-                    
+
+                    DbCommand cmdContacto = DBCommon.dbConn.GetStoredProcCommand("PutCotClienteContacto2");
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@emp", DbType.Int32, int.Parse(cliente.Campo_41));
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@usu", DbType.Int32, Helper.Bcero(cliente.Campo_24));
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@idcli", DbType.Int32, int.Parse(obj.IdGenerado));
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@idCont", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@Nomb", DbType.String, cliente.Campo_8);
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@tel1", DbType.String, cliente.Campo_9);
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@reemp", DbType.String, "");
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@carg", DbType.String, "");
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@email", DbType.String, cliente.Campo_15);
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@jefe", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@prof", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@anul", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@sexo", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@fechcumple", DbType.Int16, cliente.Campo_27.Substring(4));
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@estcivil", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@canthijos", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@dir", DbType.String, cliente.Campo_14);
+                    DBCommon.dbConn.AddInParameter(cmdContacto, "@cedula", DbType.String, cliente.Campo_3);
+                    DBCommon.dbConn.ExecuteNonQuery(cmdContacto);
+
                 }
 
                 obj.Estado = "ok";
@@ -426,5 +454,55 @@ namespace sdmcrmws.data
 
             return results;
         }
+
+        public static List<wsPedido> GetPedidos(int IdCliente, DateTime FechaDesde, DateTime FechaHasta)
+        {
+            List<wsPedido> li = new List<wsPedido>();
+
+            DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("EcomGetPedidosCliente");
+            DBCommon.dbConn.AddInParameter(cmd, "@IdCliente", DbType.Int32, IdCliente);
+            DBCommon.dbConn.AddInParameter(cmd, "@Desde", DbType.Date, FechaDesde);
+            DBCommon.dbConn.AddInParameter(cmd, "@Hasta", DbType.Date, FechaHasta);
+
+            using (IDataReader dr = DBCommon.dbConn.ExecuteReader(cmd))
+            {
+                while (dr.Read())
+                {
+                    var obj = new wsPedido();
+                    obj.Bodega = dr["bodega"].ToString();
+                    obj.Cliente = dr["cliente"].ToString();
+                    obj.Contacto = dr["contacto"].ToString();
+                    obj.Descuento = dr["descuento"].ToString();
+                    obj.Dias = dr["dias"].ToString();
+                    obj.Estado = dr["estado"].ToString();
+                    obj.Factibilidad = dr["factibilidad"].ToString();
+                    obj.Fecha = dr["fecha"].ToString();
+                    obj.FechaEstimada = dr["fechaestimada"].ToString();
+                    obj.FormaPago = dr["formapago"].ToString();
+                    obj.Id = dr["id"].ToString();
+                    obj.IdEmpresa = dr["idempresa"].ToString();
+                    obj.IdOrden = dr["idorden"].ToString();
+                    obj.Iva = dr["iva"].ToString();
+                    obj.Moneda = dr["moneda"].ToString();
+                    obj.Notas = dr["notas"].ToString();
+                    obj.NotasInternas = dr["notasinternas"].ToString();
+                    obj.Numero = dr["numero"].ToString();
+                    obj.NumeroReferencia = dr["numeroreferencia"].ToString();
+                    obj.Subtotal = dr["subtotal"].ToString();
+                    obj.Tasa = dr["tasa"].ToString();
+                    obj.TipoDocumento = dr["tipodocumento"].ToString();
+                    obj.TipoReferencia = dr["tiporeferencia"].ToString();
+                    obj.Total = dr["total"].ToString();
+                    obj.Usuario = dr["usuario"].ToString();
+                    obj.Vendedor = dr["vendedor"].ToString();
+                    li.Add(obj);
+                }
+                dr.Close();
+            }
+
+            return li;
+        }
+
+       
     }
 }
