@@ -42,7 +42,7 @@ namespace sdmcrmws.data
                 DBCommon.dbConn.AddInParameter(cmd, "@emp", DbType.Int32, int.Parse(Orden.IdEmpresa));
                 DBCommon.dbConn.AddInParameter(cmd, "@usucrea", DbType.Int32, int.Parse(Orden.Usuario));
                 DBCommon.dbConn.AddInParameter(cmd, "@bod", DbType.Int32, int.Parse(Orden.Bodega));
-                DBCommon.dbConn.AddInParameter(cmd, "@usu", DbType.Int32, int.Parse(Orden.Usuario) * -1);
+                DBCommon.dbConn.AddInParameter(cmd, "@usu", DbType.Int32, int.Parse(Orden.Usuario) ); //* -1
                 DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, int.Parse(Orden.Id));
                 DBCommon.dbConn.AddInParameter(cmd, "@fecha", DbType.DateTime, DateTime.Parse(Orden.Fecha));
                 DBCommon.dbConn.AddInParameter(cmd, "@idtipo", DbType.Int32, int.Parse(Orden.TipoDocumento));
@@ -71,7 +71,18 @@ namespace sdmcrmws.data
                 DBCommon.dbConn.AddInParameter(cmd, "@idCita", DbType.Int32, 0);            
                 DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
 
-                IdRetorno = int.Parse(DBCommon.dbConn.GetParameterValue(cmd, "@idRetorno").ToString());
+                if (Orden.Id == "0")
+                    IdRetorno = int.Parse(DBCommon.dbConn.GetParameterValue(cmd, "@idRetorno").ToString());
+                else
+                    IdRetorno = int.Parse(Orden.Id);
+
+                //Actualizar el campo origen
+                cmd = DBCommon.dbConn.GetStoredProcCommand("PutCM_OrigenOrdenes");
+                DBCommon.dbConn.AddInParameter(cmd, "@idCotizacion", DbType.Int32, 0);
+                DBCommon.dbConn.AddInParameter(cmd, "@idPedido", DbType.Int32, 0);
+                DBCommon.dbConn.AddInParameter(cmd, "@idOrden", DbType.Int32, IdRetorno);
+                DBCommon.dbConn.AddInParameter(cmd, "@Origen", DbType.String, Orden.Origen);
+                DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
 
                 foreach (var detalle in Orden.Detalle)
                 {
@@ -110,7 +121,16 @@ namespace sdmcrmws.data
                 cmd = DBCommon.dbConn.GetStoredProcCommand("PutTalActualizarTotalOrden");
                 DBCommon.dbConn.AddInParameter(cmd, "@idorden", DbType.Int32, IdRetorno);
                 DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
-                
+
+                cmd = DBCommon.dbConn.GetStoredProcCommand("CMGetLineasOrden");
+                DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, IdRetorno);
+                var ds = DBCommon.dbConn.ExecuteDataSet(cmd, Tr);
+                obj.Lineas = new List<string>();
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    obj.Lineas.Add(dr["id"].ToString());
+                }
+
                 Tr.Commit();
 
                 obj.IdGenerado = IdRetorno.ToString();
@@ -270,6 +290,7 @@ namespace sdmcrmws.data
                     obj.Total = dr["total"].ToString();
                     obj.Usuario = dr["usuario"].ToString();
                     obj.Vendedor = dr["vendedor"].ToString();
+                    obj.Origen = dr["origen"].ToString();
                 }
                 dr.Close();
             }
@@ -296,6 +317,135 @@ namespace sdmcrmws.data
                 }
             }
 
+            return obj;
+        }
+
+        public static wsControl putItemOrden(Stream JSONdataStream)
+        {
+            wsControl obj = new wsControl();
+            obj.FechaHora = DateTime.Now.ToString();
+            obj.Origen = System.Reflection.MethodBase.GetCurrentMethod().Name;
+
+            SqlConnection Conn = (SqlConnection)DBCommon.dbConn.CreateConnection();
+            Conn.Open();
+            SqlTransaction Tr = Conn.BeginTransaction();
+
+            try
+            {
+                StreamReader reader = new StreamReader(JSONdataStream);
+                string JSONdata = reader.ReadToEnd();
+
+                var Orden = JsonConvert.DeserializeObject<wsOrdenTaller>(JSONdata);
+
+                if (Orden == null)
+                {
+                    // Error: Couldn't deserialize our JSON string into a "wsOrder" object.
+                    throw new System.InvalidOperationException("Objeto JSON no pudo convertirse en encabezado orden");
+                }
+
+                foreach (var detalle in Orden.Detalle)
+                {
+                   var  cmd = DBCommon.dbConn.GetStoredProcCommand("PutTalOrdenItems");
+                    DBCommon.dbConn.AddInParameter(cmd, "@emp", DbType.Int32, int.Parse(Orden.IdEmpresa));
+                    DBCommon.dbConn.AddInParameter(cmd, "@bod", DbType.Int32, int.Parse(Orden.Bodega));
+                    DBCommon.dbConn.AddInParameter(cmd, "@usu", DbType.Int32, int.Parse(Orden.Usuario));
+                    DBCommon.dbConn.AddInParameter(cmd, "@idcot", DbType.Int32, int.Parse(Orden.Id));
+                    DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, detalle.Id);
+                    DBCommon.dbConn.AddInParameter(cmd, "@iditem", DbType.Int32, detalle.IdItem);
+                    DBCommon.dbConn.AddInParameter(cmd, "@cant", DbType.Currency, detalle.Cantidad);
+                    DBCommon.dbConn.AddInParameter(cmd, "@tiempo", DbType.Currency, detalle.Tiempo);
+                    DBCommon.dbConn.AddInParameter(cmd, "@valor_hora", DbType.Currency, detalle.ValorHora);
+                    DBCommon.dbConn.AddInParameter(cmd, "@valor_ope", DbType.Currency, detalle.ValorOperacion);
+                    DBCommon.dbConn.AddInParameter(cmd, "@iva", DbType.Currency, detalle.Iva);
+                    DBCommon.dbConn.AddInParameter(cmd, "@notas", DbType.String, detalle.Notas);
+                    DBCommon.dbConn.AddInParameter(cmd, "@porcentaje_descuento", DbType.Currency, detalle.PorcentajeDescuento);
+                    DBCommon.dbConn.AddInParameter(cmd, "@id_operario", DbType.Int32, detalle.Operario);
+                    DBCommon.dbConn.AddInParameter(cmd, "@facturar_a", DbType.String, detalle.Facturar);
+                    DBCommon.dbConn.AddInParameter(cmd, "@tipo_operacion", DbType.String, detalle.TipoOperacion);
+                    DBCommon.dbConn.AddInParameter(cmd, "@id_tal_chequeo", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@id_causal", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@id_sintoma", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@id_dano", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@gara_notas1", DbType.String, "");
+                    DBCommon.dbConn.AddInParameter(cmd, "@gara_notas2", DbType.String, "");
+                    DBCommon.dbConn.AddInParameter(cmd, "@estado_garantia", DbType.Int32, 0);
+                    DBCommon.dbConn.AddInParameter(cmd, "@valor_garantia", DbType.Int32, 0);
+                    DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
+                }
+
+                var cmd2 = DBCommon.dbConn.GetStoredProcCommand("CMGet_id_item_orden");
+                DBCommon.dbConn.AddInParameter(cmd2, "@IdOrden", DbType.Int32, int.Parse(Orden.Id));
+                var ds = DBCommon.dbConn.ExecuteDataSet(cmd2, Tr);
+                if (ds.Tables[0].Rows.Count > 0)
+                    obj.IdGenerado = ds.Tables[0].Rows[0]["id"].ToString();
+                else
+                    obj.IdGenerado = "1";
+
+                cmd2 = DBCommon.dbConn.GetStoredProcCommand("CMGetLineasOrden");
+                DBCommon.dbConn.AddInParameter(cmd2, "@id", DbType.Int32, Orden.Id);
+                ds = DBCommon.dbConn.ExecuteDataSet(cmd2, Tr);
+                obj.Lineas = new List<string>();
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    obj.Lineas.Add(dr["id"].ToString());
+                }
+
+
+                Tr.Commit();
+
+                
+                obj.Estado = "ok";
+            }
+            catch (Exception ex)
+            {
+                Tr.Rollback();
+                obj.Estado = "error";
+                obj.Error = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    obj.Error += Environment.NewLine + ex.InnerException.Message;
+                }
+            }
+            finally
+            {
+                Conn.Close();
+            }
+
+            return obj;
+        }
+
+        public static wsControl DelItemOrden(int IdLinea)
+        {
+            wsControl obj = new wsControl
+            {
+                FechaHora = DateTime.Now.ToString(),
+                Origen = System.Reflection.MethodBase.GetCurrentMethod().Name
+            };
+
+            SqlConnection Conn = (SqlConnection)DBCommon.dbConn.CreateConnection();
+
+            try
+            {                
+                Conn.Open();
+                var cmd = DBCommon.dbConn.GetStoredProcCommand("CM_DelItemOrden");
+                DBCommon.dbConn.AddInParameter(cmd, "@idLinea", DbType.Int32, IdLinea);
+                DBCommon.dbConn.ExecuteNonQuery(cmd);
+                obj.IdGenerado = "1";
+                obj.Estado = "Ok";
+            }
+            catch (Exception ex)
+            {                
+                obj.Estado = "error";
+                obj.Error = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    obj.Error += Environment.NewLine + ex.InnerException.Message;
+                }
+            }
+            finally
+            {
+                Conn.Close();
+            }
             return obj;
         }
     }

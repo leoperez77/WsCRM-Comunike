@@ -70,7 +70,7 @@ select top 5
 		when o.sexo =  1 then 'M'
 		when o.sexo = 2 then 'F'
 		else null end
-	))),																		-- Sexo tercero 
+	))),																		
 	campo_31 = ltrim(rtrim(c.razon_social)),									-- Razon comercial 
 	campo_32 = ltrim(rtrim(convert(varchar, ''))),								-- Usuario que creo o modificó, no disponible
 	campo_33 = ltrim(rtrim(convert(varchar, cupo_credito))),					-- cupo de crédito
@@ -1810,7 +1810,6 @@ GO
 ----------------------------------------------------------------------------
 CREATE PROC CMGetcot_item_sus @id_emp int 
 AS
-
 select 
 	campo_1 = ltrim(rtrim(convert(varchar,id_cot_item))),
 	campo_2 = ltrim(rtrim(convert(varchar,id_cot_item_sus))),
@@ -2079,4 +2078,66 @@ as
 	where id = @id
 GO
 
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'PutFacturarCotPedidoItems')
+	DROP PROC PutFacturarCotPedidoItems
+GO
 
+CREATE PROCEDURE PutFacturarCotPedidoItems
+    (
+      @renglon INT ,
+      @idcot INT ,
+      @iditem INT ,
+      @fac CHAR(1)
+    )
+AS
+    UPDATE  cot_pedido_item
+    SET     facturar_a = @fac
+    WHERE   id_cot_item = @iditem
+            AND id_cot_pedido = @idcot; 
+GO--
+
+
+IF EXISTS(SELECT * FROM sysobjects WHERE name = 'CMGet_stockusados')
+	DROP PROC CMGet_stockusados
+GO
+----------------------------------------------------------------------------
+-- Procedimiento de lectura de registos por sincronizar tabla stockusados
+----------------------------------------------------------------------------
+CREATE PROC CMGet_stockusados @id_emp int 
+AS
+select 
+	campo_1 = ltrim(rtrim(convert(varchar,id_vin))),
+	campo_2 = ltrim(rtrim(convert(varchar,id_emp))),
+	campo_3 = ltrim(rtrim(convert(varchar,id_cot_item))),
+	campo_4 = ltrim(rtrim(convert(varchar,id_vin))),
+	campo_5 = ltrim(rtrim(convert(varchar,id_cot_bodega))),
+	campo_6 = ltrim(rtrim(convert(varchar,id_proveedor))),
+	campo_7 = ltrim(rtrim(convert(varchar,bodega))),
+	campo_8 = ltrim(rtrim(convert(varchar,marca))),
+	campo_9 = ltrim(rtrim(convert(varchar,linea))),
+	campo_10 = ltrim(rtrim(convert(varchar,modelo))),
+	campo_11 = ltrim(rtrim(convert(varchar,modelo_ano))),
+	campo_12 = ltrim(rtrim(convert(varchar,descripcion))),
+	campo_13 = ltrim(rtrim(convert(varchar,es_nuevo))),
+	campo_14 = ltrim(rtrim(convert(varchar,vin))),
+	campo_15 = ltrim(rtrim(convert(varchar,color))),
+	campo_16 = ltrim(rtrim(convert(varchar,fecha_creacion))),
+	campo_17 = ltrim(rtrim(convert(varchar,placa))),
+	campo_18 = ltrim(rtrim(convert(varchar,ano))),
+	campo_19 = ltrim(rtrim(convert(varchar,km))),
+	campo_20 = ltrim(rtrim(convert(varchar,notas))),
+	campo_21 = ltrim(rtrim(convert(varchar,propietario))),
+	campo_22 = ltrim(rtrim(convert(varchar,proveedor))),
+	campo_23 = ltrim(rtrim(convert(varchar,precio))),
+	campo_24 = ltrim(rtrim(convert(varchar,stock))),
+	campo_25 = ltrim(rtrim(convert(varchar,pedido))),
+	campo_26 = ltrim(rtrim(convert(varchar,disponible))),
+	campo_27 = ltrim(rtrim(convert(varchar,costo_inventario))),
+	campo_28 = ltrim(rtrim(convert(varchar,hay_stock))),
+	campo_29 = '',
+	campo_30 = ''	
+ FROM	v_veh_stock_vehiculos v
+ WHERE  (@id_emp=0 or v.id_cot_bodega=@id_emp)
+	AND v.stock>0
+	AND v.precio>0
+GO

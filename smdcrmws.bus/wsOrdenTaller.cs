@@ -101,6 +101,9 @@ namespace smdcrmws.dto
         public String Numero { get; set; }
 
         [DataMember]
+        public String Origen { get; set; }
+
+        [DataMember]
         public List<wsOperacionOrden> Detalle = new List<wsOperacionOrden>();
     }
         
@@ -147,6 +150,8 @@ namespace smdcrmws.dto
 
         [DataMember]
         public String TipoOperacion { get; set; }               
+
+       
 
     }
 }

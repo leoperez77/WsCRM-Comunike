@@ -103,5 +103,35 @@ namespace sdmcrmws.data
 
             return results;
         }
+
+        public static List<wsMaestro> GetVehiculosSalenFechas(int IdEmpresa, DateTime FechaDesde, DateTime FechaHasta)
+        {
+            List<wsMaestro> results = new List<wsMaestro>();
+            DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMGet_vehiculos_salen_fechas");
+            DBCommon.dbConn.AddInParameter(cmd, "@emp", DbType.Int32, IdEmpresa);
+            DBCommon.dbConn.AddInParameter(cmd, "@desde", DbType.Date, FechaDesde);
+            DBCommon.dbConn.AddInParameter(cmd, "@hasta", DbType.Date, FechaHasta);
+
+            //((RefCountingDataReader)db.ExecuteReader(command)).InnerReader as SqlDataReader;
+            using (IDataReader dr = DBCommon.dbConn.ExecuteReader(cmd))
+            {
+                while (dr.Read())
+                {
+                    wsMaestro obj = new wsMaestro();
+                    int iCampo = 1;
+                    for (int i = 0; i < dr.FieldCount; i++)
+                    {
+                        obj["Campo_" + iCampo.ToString()] = !dr.IsDBNull(i) ? dr.GetString(i) : "";
+                        iCampo++;
+                    }
+
+                    results.Add(obj);
+
+                }
+                dr.Close();
+            }
+
+            return results;
+        }
     }
 }

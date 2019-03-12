@@ -27,6 +27,9 @@ namespace smdcrmws.dto
         [DataMember]
         public string IdGenerado { get; set; }
 
+        [DataMember]
+        public List<string> Lineas { get; set; }
+
         public object this[string propertyName]
         {
             get
@@ -42,4 +45,6 @@ namespace smdcrmws.dto
         }
 
     }
+
+    
 }

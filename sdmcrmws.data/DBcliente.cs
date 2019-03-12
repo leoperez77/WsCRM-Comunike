@@ -354,8 +354,8 @@ namespace sdmcrmws.data
                 DBCommon.dbConn.AddInParameter(cmd, "@ape1", DbType.String, cliente.Campo_39);
                 DBCommon.dbConn.AddInParameter(cmd, "@ape2", DbType.String, cliente.Campo_40);
                 DBCommon.dbConn.AddInParameter(cmd, "@IdTipoTributario2", DbType.String, Helper.Bcero(cliente.Campo_49));
+                DBCommon.dbConn.AddInParameter(cmd, "@tipo_identificacion", DbType.String, cliente.Campo_5);
 
-                
 
                 try
                 {
@@ -377,8 +377,7 @@ namespace sdmcrmws.data
 
                 if (int.Parse(cliente.Campo_1)==0)
                 {
-
-
+                    
                     DbCommand cmdcl = DBCommon.dbConn.GetStoredProcCommand("GetCotClientes");
                     DBCommon.dbConn.AddInParameter(cmdcl, "@id", DbType.Int32, 0);
                     DBCommon.dbConn.AddInParameter(cmdcl, "@Nit", DbType.String, cliente.Campo_3);

@@ -53,7 +53,7 @@ namespace sdmcrmws.data
                 DBCommon.dbConn.AddInParameter(cmd, "@tot_Sub", DbType.Currency, decimal.Parse(Pedido.Subtotal));
                 DBCommon.dbConn.AddInParameter(cmd, "@tot_Descuento", DbType.Currency, decimal.Parse(Pedido.Descuento));
                 DBCommon.dbConn.AddInParameter(cmd, "@tot_Iva", DbType.Currency, decimal.Parse(Pedido.Iva));
-                DBCommon.dbConn.AddInParameter(cmd, "@tot_Tot", DbType.Currency, decimal.Parse(Pedido.Subtotal));               
+                DBCommon.dbConn.AddInParameter(cmd, "@tot_Tot", DbType.Currency, decimal.Parse(Pedido.Total));               
                 DBCommon.dbConn.AddInParameter(cmd, "@moneda", DbType.Int32, int.Parse(Pedido.Moneda));
                 DBCommon.dbConn.AddInParameter(cmd, "@Tasa", DbType.Currency, decimal.Parse(Pedido.Tasa));
                 DBCommon.dbConn.AddInParameter(cmd, "@notas", DbType.String, Pedido.Notas);
@@ -80,13 +80,30 @@ namespace sdmcrmws.data
                 DBCommon.dbConn.AddInParameter(cmd, "@id_orden_taller", DbType.Int32, Pedido.IdOrden);               
                 DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
 
-                IdRetorno = int.Parse(DBCommon.dbConn.GetParameterValue(cmd, "@idRetorno").ToString());
+                if (Pedido.Id == "0")
+                    IdRetorno = int.Parse(DBCommon.dbConn.GetParameterValue(cmd, "@idRetorno").ToString());
+                else
+                    IdRetorno = int.Parse(Pedido.Id);
 
-             
+                //Actualizar el campo origen
+                cmd = DBCommon.dbConn.GetStoredProcCommand("PutCM_OrigenOrdenes");
+                DBCommon.dbConn.AddInParameter(cmd, "@idCotizacion", DbType.Int32, 0);
+                DBCommon.dbConn.AddInParameter(cmd, "@idPedido", DbType.Int32, IdRetorno);
+                DBCommon.dbConn.AddInParameter(cmd, "@idOrden", DbType.Int32, 0);
+                DBCommon.dbConn.AddInParameter(cmd, "@Origen", DbType.String, Pedido.Origen);
+                DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
+
                 int Linea = 0;
 
                 foreach (var detalle in Pedido.Detalle)
                 {
+                    if (int.Parse(detalle.Id) > 0)
+                    {
+                        cmd = DBCommon.dbConn.GetStoredProcCommand("CM_DelItemPedido");
+                        DBCommon.dbConn.AddInParameter(cmd, "@idLinea", DbType.Int32, int.Parse(detalle.Id));
+                        DBCommon.dbConn.ExecuteNonQuery(cmd);
+                    }
+
                     cmd = DBCommon.dbConn.GetStoredProcCommand("PutCotPedidoItems");
                     DBCommon.dbConn.AddInParameter(cmd, "@emp", DbType.Int32, int.Parse(Pedido.IdEmpresa));
                     DBCommon.dbConn.AddInParameter(cmd, "@bod", DbType.Int32, int.Parse(Pedido.Bodega));
@@ -129,6 +146,15 @@ namespace sdmcrmws.data
                 cmd = DBCommon.dbConn.GetStoredProcCommand("PutCotControlTotal");
                 DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, IdRetorno);
                 DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
+
+                cmd = DBCommon.dbConn.GetStoredProcCommand("CMGetLineasPedido");
+                DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, IdRetorno);
+                obj.Lineas = new List<string>();
+                var ds = DBCommon.dbConn.ExecuteDataSet(cmd, Tr);
+                foreach (DataRow dr in ds.Tables[0].Rows)
+                {
+                    obj.Lineas.Add(dr["id"].ToString());
+                }
 
                 Tr.Commit();
 
@@ -189,6 +215,7 @@ namespace sdmcrmws.data
                     obj.Total = dr["total"].ToString();
                     obj.Usuario = dr["usuario"].ToString();
                     obj.Vendedor = dr["vendedor"].ToString();
+                    obj.Origen = dr["origen"].ToString();
                 }
                 dr.Close();
             }
@@ -219,6 +246,42 @@ namespace sdmcrmws.data
                 }
             }
 
+            
+            return obj;
+        }
+
+        public static wsControl DelItemPedido(int IdLinea)
+        {
+            wsControl obj = new wsControl
+            {
+                FechaHora = DateTime.Now.ToString(),
+                Origen = System.Reflection.MethodBase.GetCurrentMethod().Name
+            };
+
+            SqlConnection Conn = (SqlConnection)DBCommon.dbConn.CreateConnection();
+
+            try
+            {
+                Conn.Open();
+                var cmd = DBCommon.dbConn.GetStoredProcCommand("CM_DelItemPedido");
+                DBCommon.dbConn.AddInParameter(cmd, "@idLinea", DbType.Int32, IdLinea);
+                DBCommon.dbConn.ExecuteNonQuery(cmd);
+                obj.IdGenerado = "1";
+                obj.Estado = "Ok";
+            }
+            catch (Exception ex)
+            {
+                obj.Estado = "error";
+                obj.Error = ex.Message;
+                if (ex.InnerException != null)
+                {
+                    obj.Error += Environment.NewLine + ex.InnerException.Message;
+                }
+            }
+            finally
+            {
+                Conn.Close();
+            }
             return obj;
         }
     }

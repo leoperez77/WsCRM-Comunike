@@ -82,6 +82,9 @@ namespace smdcrmws.dto
         public String Negocio { get; set; }
 
         [DataMember]
+        public String Origen { get; set; }
+
+        [DataMember]
         public List<wsDetalleCotizacion> Detalle = new List<wsDetalleCotizacion>();
                
     }

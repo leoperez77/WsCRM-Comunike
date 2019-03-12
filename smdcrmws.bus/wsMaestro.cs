@@ -52,6 +52,51 @@ namespace smdcrmws.dto
         [DataMember]
         public String Campo_15 { get; set; }
 
+        [DataMember]
+        public String Campo_16 { get; set; }
+
+        [DataMember]
+        public String Campo_17 { get; set; }
+
+        [DataMember]
+        public String Campo_18 { get; set; }
+
+        [DataMember]
+        public String Campo_19 { get; set; }
+
+        [DataMember]
+        public String Campo_20 { get; set; }
+
+        [DataMember]
+        public String Campo_21 { get; set; }
+
+        [DataMember]
+        public String Campo_22 { get; set; }
+
+        [DataMember]
+        public String Campo_23 { get; set; }
+
+        [DataMember]
+        public String Campo_24 { get; set; }
+
+        [DataMember]
+        public String Campo_25 { get; set; }
+
+        [DataMember]
+        public String Campo_26 { get; set; }
+
+        [DataMember]
+        public String Campo_27 { get; set; }
+
+        [DataMember]
+        public String Campo_28 { get; set; }
+
+        [DataMember]
+        public String Campo_29 { get; set; }
+
+        [DataMember]
+        public String Campo_30 { get; set; }
+
 
         public object this[string propertyName]
         {

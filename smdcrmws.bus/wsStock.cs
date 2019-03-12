@@ -43,6 +43,9 @@ namespace smdcrmws.dto
 
         [DataMember]
         public String Vencimiento { get; set; }
-        
+
+        [DataMember]
+        public String Transito { get; set; }
+
     }
 }

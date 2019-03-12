@@ -104,9 +104,12 @@ namespace sdmcrmws.data
                 }
                    
                 int IdRetorno = 0;
-                bool EsCotizacionVehiculos = false;                               
+                bool EsCotizacionVehiculos = false;
+                decimal TotalCotizacion = 0;
 
-                if (Cotizacion.Detalle.Count == 1 && decimal.Parse(Cotizacion.Detalle[0].Cantidad) > 1)
+                if (Cotizacion.Detalle.Count == 1 && 
+                    decimal.Parse(Cotizacion.Detalle[0].Cantidad) > 1 &&
+                    Cotizacion.Id == "0" )
                 {
                     //Evaluar si es un vehículo en cuyo caso generar una cotización por cada uno
                     DbCommand cmdvh = DBCommon.dbConn.GetStoredProcCommand("CMGet_cot_item");
@@ -141,10 +144,10 @@ namespace sdmcrmws.data
                         DBCommon.dbConn.AddInParameter(cmd, "@idformapago", DbType.Int32, int.Parse(Cotizacion.FormaPago));
                         DBCommon.dbConn.AddInParameter(cmd, "@idcontacto", DbType.Int32, int.Parse(Cotizacion.Contacto));
                         DBCommon.dbConn.AddInParameter(cmd, "@dias", DbType.Int32, int.Parse(Cotizacion.Dias));
-                        DBCommon.dbConn.AddInParameter(cmd, "@tot_Sub", DbType.Currency, decimal.Parse(Cotizacion.Subtotal));
-                        DBCommon.dbConn.AddInParameter(cmd, "@tot_Descuento", DbType.Currency, decimal.Parse(Cotizacion.Descuento));
-                        DBCommon.dbConn.AddInParameter(cmd, "@tot_Iva", DbType.Currency, decimal.Parse(Cotizacion.Iva));
-                        DBCommon.dbConn.AddInParameter(cmd, "@tot_Tot", DbType.Currency, decimal.Parse(Cotizacion.Total));
+                        DBCommon.dbConn.AddInParameter(cmd, "@tot_Sub", DbType.Currency, decimal.Parse(Cotizacion.Subtotal) / decimal.Parse(Cotizacion.Detalle[0].Cantidad));
+                        DBCommon.dbConn.AddInParameter(cmd, "@tot_Descuento", DbType.Currency, decimal.Parse(Cotizacion.Descuento) / decimal.Parse(Cotizacion.Detalle[0].Cantidad));
+                        DBCommon.dbConn.AddInParameter(cmd, "@tot_Iva", DbType.Currency, decimal.Parse(Cotizacion.Iva) / decimal.Parse(Cotizacion.Detalle[0].Cantidad));
+                        DBCommon.dbConn.AddInParameter(cmd, "@tot_Tot", DbType.Currency, decimal.Parse(Cotizacion.Total) / decimal.Parse(Cotizacion.Detalle[0].Cantidad));
                         DBCommon.dbConn.AddInParameter(cmd, "@idestado", DbType.Int32, int.Parse(Cotizacion.Estado));
                         DBCommon.dbConn.AddInParameter(cmd, "@moneda", DbType.Int32, int.Parse(Cotizacion.Moneda));
                         DBCommon.dbConn.AddInParameter(cmd, "@Tasa", DbType.Currency, decimal.Parse(Cotizacion.Tasa));
@@ -199,6 +202,16 @@ namespace sdmcrmws.data
 
                         IdRetorno = int.Parse(DBCommon.dbConn.GetParameterValue(cmd, "@idRetorno").ToString());
 
+                        //Actualizar el campo origen
+                        cmd = DBCommon.dbConn.GetStoredProcCommand("PutCM_OrigenOrdenes");
+                        DBCommon.dbConn.AddInParameter(cmd, "@idCotizacion", DbType.Int32, IdRetorno);
+                        DBCommon.dbConn.AddInParameter(cmd, "@idPedido", DbType.Int32, 0);
+                        DBCommon.dbConn.AddInParameter(cmd, "@idOrden", DbType.Int32, 0);
+                        DBCommon.dbConn.AddInParameter(cmd, "@Origen", DbType.String, Cotizacion.Origen);
+                        DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
+
+
+
                         cmd = DBCommon.dbConn.GetStoredProcCommand("DelCotCotizacion_Pago");
                         DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, IdRetorno);
                         DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
@@ -215,7 +228,7 @@ namespace sdmcrmws.data
                             DBCommon.dbConn.AddInParameter(cmd, "@idcot", DbType.Int32, IdRetorno);
                             DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, detalle.Id);
                             DBCommon.dbConn.AddInParameter(cmd, "@iditem", DbType.Int32, detalle.IdItem);
-                            DBCommon.dbConn.AddInParameter(cmd, "@cant", DbType.Currency, detalle.Cantidad);
+                            DBCommon.dbConn.AddInParameter(cmd, "@cant", DbType.Currency, 1);
                             DBCommon.dbConn.AddInParameter(cmd, "@preciolista", DbType.Currency, detalle.Precio);
                             DBCommon.dbConn.AddInParameter(cmd, "@preciocotizado", DbType.Currency, detalle.PrecioCotizado);
                             DBCommon.dbConn.AddInParameter(cmd, "@iva", DbType.Currency, detalle.Iva);
@@ -254,6 +267,15 @@ namespace sdmcrmws.data
                         obj.IdGenerado += IdRetorno.ToString() + ",";
                         
                         #endregion
+                    }
+
+                    var cmd2 = DBCommon.dbConn.GetStoredProcCommand("CMGetLineasOrden");
+                    DBCommon.dbConn.AddInParameter(cmd2, "@id", DbType.Int32, IdRetorno);
+                    var ds = DBCommon.dbConn.ExecuteDataSet(cmd2, Tr);
+                    obj.Lineas = new List<string>();
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        obj.Lineas.Add(dr["id"].ToString());
                     }
 
                     obj.IdGenerado = obj.IdGenerado.Substring(0, obj.IdGenerado.Length - 1);
@@ -333,7 +355,10 @@ namespace sdmcrmws.data
 
                     DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
 
-                    IdRetorno = int.Parse(DBCommon.dbConn.GetParameterValue(cmd, "@idRetorno").ToString());
+                    if (Cotizacion.Id == "0")
+                        IdRetorno = int.Parse(DBCommon.dbConn.GetParameterValue(cmd, "@idRetorno").ToString());
+                    else
+                        IdRetorno = int.Parse(Cotizacion.Id);
 
                     cmd = DBCommon.dbConn.GetStoredProcCommand("DelCotCotizacion_Pago");
                     DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, IdRetorno);
@@ -386,6 +411,15 @@ namespace sdmcrmws.data
                     cmd = DBCommon.dbConn.GetStoredProcCommand("PutCotControlTotal");
                     DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, IdRetorno);
                     DBCommon.dbConn.ExecuteNonQuery(cmd, Tr);
+
+                    var cmd2 = DBCommon.dbConn.GetStoredProcCommand("CMGetLineasOrden");
+                    DBCommon.dbConn.AddInParameter(cmd2, "@id", DbType.Int32, IdRetorno);
+                    var ds = DBCommon.dbConn.ExecuteDataSet(cmd2, Tr);
+                    obj.Lineas = new List<string>();
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        obj.Lineas.Add(dr["id"].ToString());
+                    }
 
                     Tr.Commit();
 

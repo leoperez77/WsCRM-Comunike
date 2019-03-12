@@ -29,9 +29,7 @@ namespace smdcrmws
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putClienteSync")]
         wsControl PutClienteSync(Stream JSONdataStream);
-
-       
-
+        
         [OperationContract]
         [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putClientesSync")]
         wsControl PutClientesSync(Stream JSONdataStream);
@@ -302,6 +300,37 @@ namespace smdcrmws
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getOrden/{IdOrden}")]
         wsOrdenTaller GetOrden(string IdOrden);
 
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putVehiculo")]
+        wsControl putVehiculo(Stream JSONdataStream);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetInventarioUsados/{IdBodega}")]
+        List<wsMaestro> GetInventarioUsados(string IdBodega);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetVehiculosSalenDias/{IdEmpresa}/{FechaDesde}/{FechaHasta}")]
+        List<wsMaestro> GetVehiculosSalenDias(string IdEmpresa, string FechaDesde, string FechaHasta);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetEstadisticaVehiculo/{IdVehiculo}/{FechaDesde}/{FechaHasta}")]
+        List<wsMaestro> GetEstadisticaVehiculo(string IdVehiculo, string FechaDesde, string FechaHasta);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetStatusHn/{Id}")]
+        List<wsMaestro> GetStatusHn(string Id);
+
+        [OperationContract]
+        [WebInvoke(Method = "POST", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "putItemOrden")]
+        wsControl putItemOrden(Stream JSONdataStream);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "delItemOrden/{Id}")]
+        wsControl delItemOrden(string Id);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "delItemPedido/{Id}")]
+        wsControl delItemPedido(string Id);
     }
 
 
