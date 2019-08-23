@@ -1,4 +1,6 @@
-create table cm_logcambios
+
+
+CREATE table cm_logcambios
 (
 	id int identity not null primary key,
 	tabla varchar(40),

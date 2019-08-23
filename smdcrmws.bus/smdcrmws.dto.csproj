@@ -59,12 +59,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DocumentoCartera.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResumenCartera.cs" />
     <Compile Include="wsCita.cs" />
     <Compile Include="wsCliente.cs" />
     <Compile Include="wsContacto.cs" />
     <Compile Include="wsControl.cs" />
     <Compile Include="wsOperacion.cs" />
+    <Compile Include="wsResultado.cs" />
     <Compile Include="wsStock.cs" />
     <Compile Include="wsPedido.cs" />
     <Compile Include="wsCotizacion.cs" />

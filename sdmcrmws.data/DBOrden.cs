@@ -125,10 +125,18 @@ namespace sdmcrmws.data
                 cmd = DBCommon.dbConn.GetStoredProcCommand("CMGetLineasOrden");
                 DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, IdRetorno);
                 var ds = DBCommon.dbConn.ExecuteDataSet(cmd, Tr);
-                obj.Lineas = new List<string>();
+                obj.Lineas = new List<wsResultado>();
+              
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    obj.Lineas.Add(dr["id"].ToString());
+                    var res = new wsResultado
+                    {
+                        Id = int.Parse(dr["id"].ToString()),
+                        IdItem = int.Parse(dr["IdItem"].ToString()),
+                        FacturarA = dr["Facturar"].ToString()
+                    };
+
+                    obj.Lineas.Add(res);
                 }
 
                 Tr.Commit();
@@ -384,12 +392,20 @@ namespace sdmcrmws.data
                 cmd2 = DBCommon.dbConn.GetStoredProcCommand("CMGetLineasOrden");
                 DBCommon.dbConn.AddInParameter(cmd2, "@id", DbType.Int32, Orden.Id);
                 ds = DBCommon.dbConn.ExecuteDataSet(cmd2, Tr);
-                obj.Lineas = new List<string>();
+                
+                obj.Lineas = new List<wsResultado>();
+
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    obj.Lineas.Add(dr["id"].ToString());
-                }
+                    var res = new wsResultado
+                    {
+                        Id = int.Parse(dr["id"].ToString()),
+                        IdItem = int.Parse(dr["IdItem"].ToString()),
+                        FacturarA = dr["Facturar"].ToString()
+                    };
 
+                    obj.Lineas.Add(res);
+                }
 
                 Tr.Commit();
 

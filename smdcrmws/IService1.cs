@@ -75,6 +75,10 @@ namespace smdcrmws
         List<wsMaestro> GetSubgruposSync(string IdEmpresa);
 
         [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSgSync/{IdEmpresa}")]
+        List<wsMaestro> getSgSync(string IdEmpresa);
+
+        [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getBodegasSync/{IdEmpresa}")]
         List<wsMaestro> GetBodegasSync(string IdEmpresa);
 
@@ -130,9 +134,7 @@ namespace smdcrmws
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getPerfilesClienteSync/{IdEmpresa}")]
         List<wsMaestro> GetPerfilesClienteSync(string IdEmpresa);
 
-        [OperationContract]
-        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubgrupos3Sync/{IdEmpresa}")]
-        List<wsMaestro> GetSubgrupos3Sync(string IdEmpresa);
+       
 
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubgrupos4Sync/{IdEmpresa}")]
@@ -167,6 +169,10 @@ namespace smdcrmws
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getTiposServicioVehSync/{IdEmpresa}")]
         List<wsMaestro> GetTiposServicioVehSync(string IdEmpresa);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getSubgrupos3Sync/{IdEmpresa}")]
+        List<wsMaestro> GetSubgrupos3Sync(string IdEmpresa);
 
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "getModelosLineaVehSync/{IdEmpresa}")]
@@ -331,6 +337,16 @@ namespace smdcrmws
         [OperationContract]
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "delItemPedido/{Id}")]
         wsControl delItemPedido(string Id);
+
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetResumenCartera/{Nit}")]
+        ResumenCartera GetResumenCartera(string Nit);
+
+        [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetDetalleCartera/{Nit}")]
+       List<DocumentoCartera>  GetDetalleCartera(string Nit);
+
     }
 
 

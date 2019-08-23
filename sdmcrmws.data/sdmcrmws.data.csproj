@@ -84,6 +84,7 @@
     <Compile Include="DBUsuario.cs" />
     <Compile Include="DBVehiculos.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="MapDataReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

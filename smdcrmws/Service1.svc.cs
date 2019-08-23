@@ -205,11 +205,7 @@ namespace smdcrmws
             return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_cliente_perfiles");
         }
 
-        public List<wsMaestro> GetSubgrupos3Sync(string IdEmpresa)
-        {
-            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_grupo_subgrupos3");
-        }
-
+      
         public List<wsMaestro> GetSubgrupos4Sync(string IdEmpresa)
         {
             return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_grupo_subgrupos4");
@@ -246,9 +242,15 @@ namespace smdcrmws
         }
 
         public List<wsMaestro> GetTiposServicioVehSync(string IdEmpresa)
-        {
+        {            
             return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetveh_servicios");
         }
+
+        public List<wsMaestro> GetSubgrupos3Sync(string IdEmpresa)
+        {
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_grupo_subgrupos3");
+        }
+
 
         public List<wsLineaModelo> GetModelosLineaVehSync(string IdEmpresa)
         {
@@ -615,6 +617,21 @@ namespace smdcrmws
                 response.StatusDescription = ex.Message.Replace("\r\n", "");
                 return null;
             }
+        }
+
+        public List<wsMaestro> getSgSync(string IdEmpresa)
+        {   
+            return DBMaestro.GetMaestro(int.Parse(IdEmpresa), "CMGetcot_grupo_subgrupos3");
+        }
+
+        public ResumenCartera GetResumenCartera(string Nit)
+        {
+            return DBcliente.GetResumenCartera(Nit);
+        }
+
+        public List<DocumentoCartera> GetDetalleCartera(string Nit)
+        {
+            return DBcliente.GetDetalleCartera(Nit);
         }
     }
 }

@@ -9,6 +9,28 @@ namespace sdmcrmws.data
 {
     public class DBcliente
     {
+        public static ResumenCartera GetResumenCartera(string Nit)
+        {
+            DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMGetResumenCartera");
+            DBCommon.dbConn.AddInParameter(cmd, "@Nit", DbType.String, Nit);
+            using (IDataReader dr = DBCommon.dbConn.ExecuteReader(cmd))
+            {
+                var obj = MapDataReader.MapToObject<ResumenCartera>(dr);
+                return obj;
+            }
+        }
+
+        public static List<DocumentoCartera> GetDetalleCartera(string Nit)
+        {
+            DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMGetDetalleCartera");
+            DBCommon.dbConn.AddInParameter(cmd, "@Nit", DbType.String, Nit);
+            using (IDataReader dr = DBCommon.dbConn.ExecuteReader(cmd))
+            {
+                var obj = MapDataReader.DataReaderMapToList<DocumentoCartera>(dr);
+                return obj;
+            }
+        }
+
         public static List<wsCliente> GetClientesSincronizar(string IdEmpresa)
         {
             List<wsCliente> results = new List<wsCliente>();

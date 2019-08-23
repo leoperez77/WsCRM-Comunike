@@ -850,7 +850,7 @@ GO
 CREATE PROC CMGetcot_grupo_subgrupos3 @id_emp int 
 AS
 
-select id_emp,
+select 
 	campo_1 = ltrim(rtrim(convert(varchar,id_cot_grupo_sub))),				-- id del subgrupo padre
 	campo_2 = ltrim(rtrim(convert(varchar,s3.id))),
 	campo_3 = ltrim(rtrim(convert(varchar,s3.descripcion))),
@@ -882,7 +882,7 @@ GO
 CREATE PROC CMGetcot_grupo_subgrupos4 @id_emp int 
 AS
 
-select id_emp,
+select 
 	campo_1 = ltrim(rtrim(convert(varchar,id_cot_grupo_sub3))),				-- id del subgrupo padre
 	campo_2 = ltrim(rtrim(convert(varchar,s4.id))),
 	campo_3 = ltrim(rtrim(convert(varchar,s4.descripcion))),

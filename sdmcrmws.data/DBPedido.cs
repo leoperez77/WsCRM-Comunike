@@ -149,12 +149,21 @@ namespace sdmcrmws.data
 
                 cmd = DBCommon.dbConn.GetStoredProcCommand("CMGetLineasPedido");
                 DBCommon.dbConn.AddInParameter(cmd, "@id", DbType.Int32, IdRetorno);
-                obj.Lineas = new List<string>();
+                
+                obj.Lineas = new List<wsResultado>();
                 var ds = DBCommon.dbConn.ExecuteDataSet(cmd, Tr);
                 foreach (DataRow dr in ds.Tables[0].Rows)
                 {
-                    obj.Lineas.Add(dr["id"].ToString());
+                    var res = new wsResultado
+                    {
+                        Id = int.Parse(dr["id"].ToString()),
+                        IdItem = int.Parse(dr["IdItem"].ToString()),
+                        FacturarA = dr["Facturar"].ToString()
+                    };
+
+                    obj.Lineas.Add(res);
                 }
+
 
                 Tr.Commit();
 
