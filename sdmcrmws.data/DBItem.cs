@@ -218,5 +218,39 @@ namespace sdmcrmws.data
 
             return obj;
         }
+        
+         public static wsMaestro GetStock2(int IdItem, int IdBodega)
+        {
+            var obj = new wsMaestro();
+
+            DbCommand cmd = DBCommon.dbConn.GetStoredProcCommand("CMGet_stock2");
+            DBCommon.dbConn.AddInParameter(cmd, "@idItem", DbType.Int32, IdItem);
+            DBCommon.dbConn.AddInParameter(cmd, "@IdBodega", DbType.Int32, IdBodega);
+
+            try
+            {
+                using (IDataReader dr = DBCommon.dbConn.ExecuteReader(cmd))
+                {
+                    while (dr.Read())
+                    {
+                        obj = new wsMaestro();
+                        int iCampo = 1;
+                        for (int i = 0; i < dr.FieldCount; i++)
+                        {
+                            obj["Campo_" + iCampo.ToString()] = !dr.IsDBNull(i) ? dr.GetString(i) : "";
+                            iCampo++;
+                        }
+                    }
+                    dr.Close();
+                }
+
+            }
+            catch
+            {
+                throw;
+            }
+
+            return obj;
+        }
     }
 }
