@@ -633,5 +633,10 @@ namespace smdcrmws
         {
             return DBcliente.GetDetalleCartera(Nit);
         }
+        
+          public wsMaestro Get_Stock2(string IdItem, string IdBodega)
+        {
+            return DBItem.GetStock2(int.Parse(IdItem), int.Parse(IdBodega));
+        }
     }
 }
