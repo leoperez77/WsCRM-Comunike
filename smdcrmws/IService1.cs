@@ -347,6 +347,9 @@ namespace smdcrmws
         [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "GetDetalleCartera/{Nit}")]
        List<DocumentoCartera>  GetDetalleCartera(string Nit);
 
+         [OperationContract]
+        [WebInvoke(Method = "GET", ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped, UriTemplate = "get_Stock2/{IdItem}/{IdBodega}")]
+        wsMaestro Get_Stock2(string IdItem, string IdBodega);
     }
 
 
